@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Memo
 {
-    public float maxRadius = 200.0f;
-    public float maxheight = 200.0f;
+    public float maxRadius = 50.0f;
+    public float maxheight = 50.0f;
+    public float gravity = 0.01f;
 
     public GameObject obj;
     public Vector3 pos = Vector3.zero;
@@ -26,7 +27,6 @@ public class Memo
 
     public float RandomGaussian(float mean, float stdDev)
     {
-        Random.InitState(42);
         float u1 = 1.0f - Random.value;       //uniform(0,1] random doubles
         float u2 = 1.0f - Random.value;
         float randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.PI * u2);//random normal(0,1)
@@ -43,8 +43,9 @@ public class Memo
 
         pos = new Vector3(x, y, z);
         age = (int)Mathf.Ceil(Random.Range(5000f, 10000f));
-        acc = new Vector3(0.0f, -1.0f, 0.0f);
+        vel = new Vector3(0.0F, -0.2f, 0.0f);
         Mood();
+        obj.transform.position = pos;
     }
 
     public void Mood()
@@ -68,15 +69,11 @@ public class Memo
             float sqrDist = dir.sqrMagnitude;
             dir.Normalize();
             float moodSimilarity = CompareMood(neuron);
-
             if (sqrDist < neuron.outerRing && sqrDist > neuron.innerRing)
             {
-                acc = acc + moodSimilarity * dir;
-            }
-
-              
+                acc = acc + 10 * moodSimilarity * (dir / sqrDist);
+            }     
         }
-
     }
 
 
@@ -96,7 +93,7 @@ public class Memo
     
     public void Move()
     {
-        ApplyGravity();
+        //ApplyGravity();
         vel += acc;
         pos += vel;
         obj.transform.position = pos;
@@ -105,7 +102,7 @@ public class Memo
 
     public void ApplyGravity()
     {
-        acc = new Vector3(acc.x, acc.y - 1.0f, acc.z);
+        acc = new Vector3(acc.x, acc.y - gravity, acc.z);
     }
 
 }

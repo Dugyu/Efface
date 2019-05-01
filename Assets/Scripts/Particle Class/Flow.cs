@@ -7,7 +7,7 @@ public class Flow : MonoBehaviour
     public GameObject memoGraphic;
     public GameObject neuronGraphic;
     private TrailRenderer trail;
-    public static int memoCount = 500;
+    public static int memoCount = 100;
     public static int neuronCount = 100;
     private Memo[] memos = new Memo[memoCount];
     private Neuron[] neurons = new Neuron[neuronCount];
@@ -32,7 +32,7 @@ public class Flow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        foreach(Memo memo in memos)
+        foreach (Memo memo in memos)
         {
             memo.Attract(neurons);
             memo.Update();

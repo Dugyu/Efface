@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Neuron 
 {
-    public float maxRadius = 200.0f;
+    public float maxRadius = 60.0f;
     public float maxheight = 20.0f;
     public GameObject obj;
     public Vector3 pos = Vector3.zero;
@@ -19,11 +19,12 @@ public class Neuron
     {
         id = _id;
         obj = Object.Instantiate(_neuron);
+        Place();
     }
 
     public float RandomGaussian(float mean, float stdDev)
     {
-        Random.InitState(42);
+
         float u1 = 1.0f - Random.value;       //uniform(0,1] random doubles
         float u2 = 1.0f - Random.value;
         float randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.PI * u2);//random normal(0,1)
@@ -46,6 +47,10 @@ public class Neuron
         float y = maxheight + maxheight * 0.5f * Mathf.Pow(Random.value, 7.0f);
 
         pos = new Vector3(x, y, z);
+
+        obj.transform.position = pos;
+        Mood();
+
     }
 
 
@@ -53,6 +58,7 @@ public class Neuron
     {
         mood = Mathf.Sin(Mathf.PerlinNoise(pos.x / 10.0f, pos.y / 10.0f) * Mathf.PI * 2);
         innerRing = Mathf.Pow(5.0f * (1.0f - Mathf.Pow(Random.value, 7.0f)), 2.0f);
-        outerRing = Mathf.Pow(10.0f * (1.0f - Mathf.Pow(Random.value, 7.0f)), 2.0f);
+        outerRing = Mathf.Pow(50.0f * (1.0f - Mathf.Pow(Random.value, 7.0f)), 2.0f);
+        
     }
 }
