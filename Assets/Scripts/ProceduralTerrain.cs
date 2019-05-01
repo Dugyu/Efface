@@ -122,14 +122,14 @@ public class ProceduralTerrain : MonoBehaviour
 
         for (int y = 0; y < texture.height; y++)
         {
-            if (Mathf.Abs(y - yPlayer) > 15)
+            if (Mathf.Abs(y - yPlayer) > 20)
             {
                 continue;
             }
 
             for (int x = 0; x < texture.width; x++)
             {
-                if (Mathf.Abs(x - xPlayer) > 15)
+                if (Mathf.Abs(x - xPlayer) > 20)
                 {
                     continue;
                 }

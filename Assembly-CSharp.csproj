@@ -63,6 +63,8 @@
     <Compile Include="Assets\Scripts\FirstPersonController.cs" />
     <Compile Include="Assets\Scripts\MouseCameraMove.cs" />
     <Compile Include="Assets\Scripts\ProceduralTerrain.cs" />
+    <Compile Include="Assets\Scripts\StaticTexture.cs" />
+    <None Include="Assets\Shaders\TerrainUnlit.shader" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>D:/Dugy/2019-Efface/Efface/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
