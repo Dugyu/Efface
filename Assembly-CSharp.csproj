@@ -62,6 +62,9 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\FirstPersonController.cs" />
     <Compile Include="Assets\Scripts\MouseCameraMove.cs" />
+    <Compile Include="Assets\Scripts\Particle Class\Flow.cs" />
+    <Compile Include="Assets\Scripts\Particle Class\Memo.cs" />
+    <Compile Include="Assets\Scripts\Particle Class\Neuron.cs" />
     <Compile Include="Assets\Scripts\ProceduralTerrain.cs" />
     <Compile Include="Assets\Scripts\StaticTexture.cs" />
     <None Include="Assets\Shaders\TerrainUnlit.shader" />
