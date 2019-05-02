@@ -6,23 +6,64 @@ public class Memo
 {
     public float maxRadius = 50.0f;
     public float maxheight = 50.0f;
-    public float gravity = 0.01f;
+    public float gravity = -0.55f;
 
     public GameObject obj;
     public Vector3 pos = Vector3.zero;
     public Vector3 vel = Vector3.zero;
     public Vector3 acc = Vector3.zero;
+    public Vector3 interForce = Vector3.zero;
+    public Memo targetMem = null;
     public float m = 1.0f;
-    public int age;
     public float mood;
     public int id;
 
-    public Memo(int _id, GameObject _memo)
+
+    public LinkedList<Vector3> trail = new LinkedList<Vector3>();
+    public LinkedList<float> trailWidth = new LinkedList<float>();
+
+    public bool isEnd = false;
+    public bool isStart = false;
+
+    static LinkedList<int> unusedIndices = new LinkedList<int>();
+    static int lastIndex = 1;
+
+    static int getIndex()
     {
-        id = _id;
+        int idx = 0;
+        if (unusedIndices.Count != 0)
+        {
+            idx = unusedIndices.Last.Value;
+            unusedIndices.RemoveLast();
+        }
+        else
+        {
+            idx = lastIndex;
+            lastIndex++;
+        }
+
+        return idx;
+    }
+
+    static void releaseIndex(int idx)
+    {
+        unusedIndices.AddLast(idx);
+    }
+
+    public Memo( GameObject _memo)
+    {
+        
+        id = getIndex();
         obj = Object.Instantiate(_memo);
         Reset();
         
+    }
+
+    public void Release()
+    {
+        releaseIndex(id);
+        GameObject.Destroy(obj);
+        obj = null;
     }
 
     public float RandomGaussian(float mean, float stdDev)
@@ -35,6 +76,8 @@ public class Memo
     }
     public void Reset()
     {
+
+
         float angle = Random.value * Mathf.PI * 2;
         float r = RandomGaussian(5.0f, 2.0f) + maxRadius * (1.0f - Mathf.Pow(Random.value, 7.0f));
         float x = Mathf.Cos(angle) * r;
@@ -42,10 +85,12 @@ public class Memo
         float y = maxheight + maxheight * 0.5f * Mathf.Pow(Random.value, 7.0f);
 
         pos = new Vector3(x, y, z);
-        age = (int)Mathf.Ceil(Random.Range(5000f, 10000f));
-        vel = new Vector3(0.0F, -0.2f, 0.0f);
-        Mood();
+        vel = new Vector3(0.0f, gravity, 0.0f);
+        acc = Vector3.zero;
         obj.transform.position = pos;
+        Mood();
+
+
     }
 
     public void Mood()
@@ -79,13 +124,20 @@ public class Memo
 
     public void Update()
     {
-        if (age-- < 0 || pos.y < 0)
+        if (pos.y < 0)
         {
-            Reset();
+            DrawTrail();
+            if (trail.First.Value.y < 0)
+            {
+                trail = new LinkedList<Vector3>();
+                trailWidth = new LinkedList<float>();
+                Reset();
+            }
         }
         else
         {
             Move();
+            DrawTrail();
         }
     }
 
@@ -93,16 +145,69 @@ public class Memo
     
     public void Move()
     {
-        //ApplyGravity();
-        vel += acc;
-        pos += vel;
+        
+        ApplyGravity();
+        vel *= 0.8f;
+        vel += acc+interForce;
+        pos += vel*0.08f;
         obj.transform.position = pos;
     }
 
+    public void DrawTrail()
+    {
+
+        trail.AddLast(pos); 
+
+        if (isEnd == true || isStart == true)
+        {
+            trailWidth.AddLast(0.0f);
+            Debug.Log(trailWidth.Last.Value.ToString());
+        }
+        else
+        {
+            trailWidth.AddLast(0.5f);
+        }
+
+        if (trail.Count > 500)
+        {
+            trail.RemoveFirst();
+            trailWidth.RemoveFirst();
+        }
+
+        LineRenderer r = obj.GetComponent<LineRenderer>();
+        if (trail.Count < 2)
+        {
+            return;
+        }
+
+        else
+        {
+            Vector3[] pp = new Vector3[trail.Count];
+            int i = 0;
+            foreach (Vector3 v in trail)
+            {
+                pp[i++] = v;
+            }
+
+            r.positionCount = pp.Length;
+            r.SetPositions(pp);
+
+
+            Keyframe[] kf = new Keyframe[pp.Length];
+            int j = 0;
+            foreach (float w in trailWidth)
+            {
+                kf[j++] = new Keyframe(j / (float)kf.Length, w);
+            }
+
+            r.widthCurve = new AnimationCurve(kf);
+        }
+       
+    }
 
     public void ApplyGravity()
     {
-        acc = new Vector3(acc.x, acc.y - gravity, acc.z);
+        acc = new Vector3(acc.x, acc.y + gravity, acc.z);
     }
 
 }

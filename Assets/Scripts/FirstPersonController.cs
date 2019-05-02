@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FirstPersonController : MonoBehaviour {
     Dictionary<KeyCode, Vector3> directions;
-    // Use this for initialization
+
     void Start () {
         // Turn off Mouse Cursor
         Cursor.lockState = CursorLockMode.Locked;
@@ -22,7 +22,6 @@ public class FirstPersonController : MonoBehaviour {
         
 	}
 	
-	// Update is called once per frame
 	void Update () {
         float speed = 5;
         foreach (KeyCode direction in directions.Keys) {
