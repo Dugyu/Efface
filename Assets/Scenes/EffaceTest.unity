@@ -462,6 +462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acc782dc0fd35aa4786f40a44a9bb0ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  strength: 10
   memoGraphic: {fileID: 2003162995}
   neuronGraphic: {fileID: 1838004391}
 --- !u!4 &1788138697
@@ -707,9 +708,9 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0}
+      key0: {r: 0.75, g: 1, b: 0.9956996, a: 0.11372549}
+      key1: {r: 1, g: 0.7607843, b: 0.7979399, a: 0.24313726}
+      key2: {r: 0, g: 0, b: 0, a: 1}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
@@ -724,8 +725,8 @@ LineRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 65535
-      atime2: 0
+      atime1: 26600
+      atime2: 65535
       atime3: 0
       atime4: 0
       atime5: 0
@@ -733,7 +734,7 @@ LineRenderer:
       atime7: 0
       m_Mode: 0
       m_NumColorKeys: 2
-      m_NumAlphaKeys: 2
+      m_NumAlphaKeys: 3
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0

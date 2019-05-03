@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Neuron 
 {
-    public float maxRadius = 60.0f;
-    public float maxheight = 20.0f;
+    static float maxRadius = 60.0f;
+    static float maxheight = 20.0f;
     public GameObject obj;
     public Vector3 pos = Vector3.zero;
     public float mood;
@@ -13,11 +13,17 @@ public class Neuron
     public float outerRing;
     public int id;
     public int level;
-    public int levelRange = 3;
 
-    public Neuron(int _id, GameObject _neuron)
+
+    public List<Neuron> childNeurons = new List<Neuron>();
+    public List<Neuron> parentNeurons = new List<Neuron>();
+    static int maxChildCount = 3;
+    static int minChildCount = 2;
+
+    public Neuron(int _id, int _level, GameObject _neuron)
     {
         id = _id;
+        level = _level;
         obj = Object.Instantiate(_neuron);
         Place();
     }
@@ -32,10 +38,35 @@ public class Neuron
         return randNormal;
     }
 
-    public void AssignLevel()
+    public void ChooseChildNeuron(Neuron[] neurons)
     {
-        level = (int)Mathf.Ceil(Random.value * levelRange);
+        List<int> candidates = new List<int>();
+       
+        foreach (Neuron neuron in neurons)
+        {
+            Vector3 dir = neuron.pos - pos;
+            float sqrDist = dir.sqrMagnitude;
+            if (4 * sqrDist < maxRadius* maxRadius)
+            {
+                candidates.Add(neuron.id);
+            }  
+        }
+
+        int countChoices = maxChildCount - minChildCount + 1;
+        int choice = (int)Mathf.Floor(Random.value * countChoices) + minChildCount;
+        int[] selected = new int[choice];
+
+        for (int i = 0; i< choice; i++)
+        { 
+            selected[i] = Random.Range(0, candidates.Count);
+            Neuron childNeuron = neurons[candidates[selected[i]]];
+            childNeurons.Add(childNeuron);
+            childNeuron.parentNeurons.Add(this);
+            candidates.RemoveAt(selected[i]);
+        }
+
     }
+
 
 
     public void Place()
@@ -44,13 +75,10 @@ public class Neuron
         float r = RandomGaussian(20.0f, 5.0f) + maxRadius * (1.0f - Mathf.Pow(Random.value, 7.0f));
         float x = Mathf.Cos(angle) * r;
         float z = Mathf.Sin(angle) * r;
-        float y = maxheight + maxheight * 0.5f * Mathf.Pow(Random.value, 7.0f);
-
+        float y = maxheight + maxheight * 0.5f * Mathf.Pow(Random.value, 7.0f) - maxheight * level * 0.2f;
         pos = new Vector3(x, y, z);
-
         obj.transform.position = pos;
         Mood();
-
     }
 
 

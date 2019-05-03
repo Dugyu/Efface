@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Memo
 {
-    public float maxRadius = 50.0f;
+    public float maxRadius = 60.0f;
     public float maxheight = 50.0f;
     public float gravity = -0.55f;
 
@@ -12,13 +12,17 @@ public class Memo
     public Vector3 pos = Vector3.zero;
     public Vector3 vel = Vector3.zero;
     public Vector3 acc = Vector3.zero;
-    public Vector3 interForce = Vector3.zero;
-    public Memo targetMem = null;
     public float m = 1.0f;
     public float mood;
     public int id;
 
+    public Vector3 interForce = Vector3.zero;
+    public Memo targetMem = null;
 
+    public Neuron targetNeuron = null;
+    public int movePhase = 0;
+    public int lastMovePhase = 0;
+    
     public LinkedList<Vector3> trail = new LinkedList<Vector3>();
     public LinkedList<float> trailWidth = new LinkedList<float>();
 
@@ -50,13 +54,12 @@ public class Memo
         unusedIndices.AddLast(idx);
     }
 
-    public Memo( GameObject _memo)
+    public Memo(GameObject _memo)
     {
         
         id = getIndex();
         obj = Object.Instantiate(_memo);
         Reset();
-        
     }
 
     public void Release()
@@ -76,8 +79,6 @@ public class Memo
     }
     public void Reset()
     {
-
-
         float angle = Random.value * Mathf.PI * 2;
         float r = RandomGaussian(5.0f, 2.0f) + maxRadius * (1.0f - Mathf.Pow(Random.value, 7.0f));
         float x = Mathf.Cos(angle) * r;
@@ -89,8 +90,6 @@ public class Memo
         acc = Vector3.zero;
         obj.transform.position = pos;
         Mood();
-
-
     }
 
     public void Mood()
@@ -104,21 +103,45 @@ public class Memo
         return 1.0f - Mathf.Abs(neuron.mood - mood);
     }
 
-    public void Attract(Neuron[] neurons)
+    public void FindFisrtNode(Neuron[] neurons)
     {
-        acc = Vector3.zero;
+        float mindist = Mathf.Infinity;
+        int index = 0;
 
         foreach (Neuron neuron in neurons)
         {
             Vector3 dir = neuron.pos - pos;
             float sqrDist = dir.sqrMagnitude;
-            dir.Normalize();
-            float moodSimilarity = CompareMood(neuron);
-            if (sqrDist < neuron.outerRing && sqrDist > neuron.innerRing)
+;
+            if (sqrDist < mindist)
             {
-                acc = acc + 10 * moodSimilarity * (dir / sqrDist);
-            }     
+                mindist = sqrDist;
+                index = neuron.id;
+            }
         }
+        targetNeuron = neurons[index];
+    }
+
+    public void Attract(float strength)
+    {
+
+        if (Mathf.Abs(targetNeuron.pos.y - pos.y) < 5.0f)
+        {
+            movePhase += 1;
+        }
+
+        if (movePhase != lastMovePhase)
+        {
+
+            int select = Random.Range(0, targetNeuron.childNeurons.Count);
+            targetNeuron = targetNeuron.childNeurons[select];
+        }
+        acc = Vector3.zero;
+        Vector3 dir = targetNeuron.pos - pos;
+        float sqrDist = dir.sqrMagnitude;
+        dir.Normalize();
+        acc = acc + 10 * strength * (dir / sqrDist);
+
     }
 
 
