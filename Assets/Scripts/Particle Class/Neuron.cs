@@ -17,7 +17,7 @@ public class Neuron
 
     public List<Neuron> childNeurons = new List<Neuron>();
     public List<Neuron> parentNeurons = new List<Neuron>();
-    static int maxChildCount = 3;
+    static int maxChildCount = 2;
     static int minChildCount = 2;
 
     public Neuron(int _id, int _level, GameObject _neuron)
@@ -41,6 +41,9 @@ public class Neuron
     public void ChooseChildNeuron(Neuron[] neurons)
     {
         List<int> candidates = new List<int>();
+
+        float range = maxRadius * maxRadius * 4;
+
         foreach (Neuron neuron in neurons)
         {
 
@@ -48,11 +51,10 @@ public class Neuron
 
             float sqrDist = dir.sqrMagnitude;
 
-            if ( sqrDist < maxRadius * maxRadius)
-           {
-
+            if ( sqrDist < range)
+            {
             candidates.Add(neuron.id);
-         }
+            }
 
         }
 
@@ -82,10 +84,10 @@ public class Neuron
     public void Place()
     {
         float angle = Random.value * Mathf.PI * 2;
-        float r = RandomGaussian(20.0f, 5.0f) + maxRadius * (1.0f - Mathf.Pow(Random.value, 7.0f));
+        float r = RandomGaussian(20.0f, 10.0f) + maxRadius * (1.0f - Mathf.Pow(Random.value, 7.0f)); 
         float x = Mathf.Cos(angle) * r;
         float z = Mathf.Sin(angle) * r;
-        float y = 1.5f*maxheight + maxheight * 0.5f * Mathf.Pow(Random.value, 7.0f) - maxheight * level * 0.5f;
+        float y = 2.0f*maxheight + maxheight * 0.5f * Mathf.Pow(Random.value, 7.0f) - maxheight * level * 0.5f;
         pos = new Vector3(x, y, z);
         obj.transform.position = pos;
         Mood();

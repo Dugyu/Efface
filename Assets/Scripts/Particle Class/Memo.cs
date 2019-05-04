@@ -6,7 +6,7 @@ public class Memo
 {
     public float maxRadius = 60.0f;
     public float maxheight = 100.0f;
-    public float gravity = -0.3f;
+    public float gravity = -0.5f;
 
     public GameObject obj;
     public Vector3 pos = Vector3.zero;
@@ -22,7 +22,11 @@ public class Memo
     public Neuron targetNeuron = null;
     public int movePhase = 0;
     public int lastMovePhase = 0;
-    
+
+
+    static Neuron[] pointerNeurons;
+
+
     public LinkedList<Vector3> trail = new LinkedList<Vector3>();
     public LinkedList<float> trailWidth = new LinkedList<float>();
 
@@ -54,6 +58,11 @@ public class Memo
         unusedIndices.AddLast(idx);
     }
 
+    public static void SetPointerNeurons(Neuron[] neurons)
+    {
+        pointerNeurons = neurons;
+    }
+
     public Memo(GameObject _memo)
     {
         
@@ -77,20 +86,35 @@ public class Memo
         float randNormal = mean + stdDev * randStdNormal;  //random normal(mean,stdDev^2)
         return randNormal;
     }
+
     public void Reset()
     {
-        float angle = Random.value * Mathf.PI * 2;
-        float r = RandomGaussian(20.5f, 2.0f) + maxRadius * (1.0f - Mathf.Pow(Random.value, 7.0f));
-        float x = Mathf.Cos(angle) * r;
-        float z = Mathf.Sin(angle) * r;
-        float y = maxheight + maxheight * 0.5f * Mathf.Pow(Random.value, 7.0f);
-
-        pos = new Vector3(x, y, z);
-        vel = new Vector3(0.0f, gravity, 0.0f);
-        acc = Vector3.zero;
-        obj.transform.position = pos;
-        Mood();
+        movePhase = 0;
+        lastMovePhase = 0;
+         ChooseFisrtNode();
+         pos = targetNeuron.pos;
+         pos.y = maxheight + maxheight * 0.5f * Mathf.Pow(Random.value, 7.0f);
+         vel = new Vector3(0.0f, gravity, 0.0f);
+         acc = Vector3.zero;
+         obj.transform.position = pos;
+         Mood();
     }
+
+
+    //public void Reset1()
+    //{
+    //    float angle = Random.value * Mathf.PI * 2;
+    //    float r = RandomGaussian(20.0f, 10.0f) + maxRadius * (1.0f - Mathf.Pow(Random.value, 7.0f));
+    //    float x = Mathf.Cos(angle) * r;
+    //    float z = Mathf.Sin(angle) * r;
+    //    float y = maxheight + maxheight * 0.5f * Mathf.Pow(Random.value, 7.0f);
+
+    //    pos = new Vector3(x, y, z);
+    //    vel = new Vector3(0.0f, gravity, 0.0f);
+    //    acc = Vector3.zero;
+    //    obj.transform.position = pos;
+    //    Mood();
+    //}
 
     public void Mood()
     {
@@ -103,23 +127,31 @@ public class Memo
         return 1.0f - Mathf.Abs(neuron.mood - mood);
     }
 
-    public void FindFisrtNode(Neuron[] neurons)
+
+    public void ChooseFisrtNode()
+    {
+        int selected = Random.Range(0, pointerNeurons.Length);
+        targetNeuron = pointerNeurons[selected];
+    }
+
+    public void FindFisrtNode()
     {
         float mindist = Mathf.Infinity;
         int index = 0;
 
-        foreach (Neuron neuron in neurons)
+        foreach (Neuron neuron in pointerNeurons)
         {
             Vector3 dir = neuron.pos - pos;
+            dir.y = 0.0f;
             float sqrDist = dir.sqrMagnitude;
-;
+            ;
             if (sqrDist < mindist)
             {
                 mindist = sqrDist;
                 index = neuron.id;
             }
         }
-        targetNeuron = neurons[index];
+        targetNeuron = pointerNeurons[index];
     }
 
     public void Attract(float strength)
@@ -131,20 +163,19 @@ public class Memo
 
         if (movePhase != lastMovePhase && targetNeuron.childNeurons.Count > 0)
         {
+            //gravity = 0.0f;
             int select = Random.Range(0, targetNeuron.childNeurons.Count);
             targetNeuron = targetNeuron.childNeurons[select];
             acc =  Vector3.zero;
-            //vel = new Vector3(0.0f, gravity, 0.0f);
             lastMovePhase = movePhase;
         }
 
         if (movePhase == lastMovePhase)
         {
-            acc = Vector3.zero;
             Vector3 dir = targetNeuron.pos - pos;
             float sqrDist = dir.sqrMagnitude;
             dir.Normalize();
-            acc = 10 * strength * dir * (Mathf.Exp(-0.01f * sqrDist));
+            acc = 2 * strength * dir * sqrDist *0.00001f;//(Mathf.Exp(-0.01f * sqrDist));
         }
         else
         {

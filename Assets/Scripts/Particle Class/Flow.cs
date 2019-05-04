@@ -10,13 +10,14 @@ public class Flow : MonoBehaviour
     public GameObject neuronGraphic;
     private TrailRenderer trail;
     public static int memoCount = 300;
-    public static int neuronCount =400;
+    public static int neuronCount = 50;
     public static int layerCount = 5;
     public static int neuronsPerLayer = neuronCount / layerCount;
     private List<Memo> memos = new List<Memo>();
     private Neuron[] neurons = new Neuron[neuronCount];
+    private Neuron[] neuronFirstLayer = new Neuron[neuronsPerLayer];
 
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -32,23 +33,24 @@ public class Flow : MonoBehaviour
                 neurons[(j*neuronsPerLayer) + i] = neuron;
             }   
         }
+
+        // find firt nodes for memos
+        System.Array.Copy(neurons, 0 , neuronFirstLayer, 0, neuronsPerLayer);
+
+        Memo.SetPointerNeurons(neuronFirstLayer);
+        for (int i = 0; i < memoCount; i++)
+            {
+                Memo memo = new Memo(memoGraphic);
+                memos.Add(memo);
+            }
+
         // construct neuron child and parent relation graph
         for (int j = 0; j < layerCount - 1; j++)
         {
             
             Neuron[] neuronsThisLayer = new Neuron[neuronsPerLayer];
             System.Array.Copy(neurons, (j + 1) * neuronsPerLayer, neuronsThisLayer, 0, neuronsPerLayer);
-            
-            if (j == 0)
-            {
-                for (int i = 0; i < memoCount; i++)
-                {
-                    Memo memo = new Memo(memoGraphic);
-                    memos.Add(memo);
-                    memo.FindFisrtNode(neuronsThisLayer);
-                }
-
-            }
+           
             for (int i = 0; i < neuronsPerLayer; i++)
             {
                 Neuron neuron = neurons[(j * neuronsPerLayer) + i];
