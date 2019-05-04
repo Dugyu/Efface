@@ -5,8 +5,8 @@ using UnityEngine;
 public class Memo
 {
     public float maxRadius = 60.0f;
-    public float maxheight = 50.0f;
-    public float gravity = -0.55f;
+    public float maxheight = 100.0f;
+    public float gravity = -0.3f;
 
     public GameObject obj;
     public Vector3 pos = Vector3.zero;
@@ -80,7 +80,7 @@ public class Memo
     public void Reset()
     {
         float angle = Random.value * Mathf.PI * 2;
-        float r = RandomGaussian(5.0f, 2.0f) + maxRadius * (1.0f - Mathf.Pow(Random.value, 7.0f));
+        float r = RandomGaussian(20.5f, 2.0f) + maxRadius * (1.0f - Mathf.Pow(Random.value, 7.0f));
         float x = Mathf.Cos(angle) * r;
         float z = Mathf.Sin(angle) * r;
         float y = maxheight + maxheight * 0.5f * Mathf.Pow(Random.value, 7.0f);
@@ -124,24 +124,32 @@ public class Memo
 
     public void Attract(float strength)
     {
-
         if (Mathf.Abs(targetNeuron.pos.y - pos.y) < 5.0f)
         {
             movePhase += 1;
         }
 
-        if (movePhase != lastMovePhase)
+        if (movePhase != lastMovePhase && targetNeuron.childNeurons.Count > 0)
         {
-
             int select = Random.Range(0, targetNeuron.childNeurons.Count);
             targetNeuron = targetNeuron.childNeurons[select];
+            acc =  Vector3.zero;
+            //vel = new Vector3(0.0f, gravity, 0.0f);
+            lastMovePhase = movePhase;
         }
-        acc = Vector3.zero;
-        Vector3 dir = targetNeuron.pos - pos;
-        float sqrDist = dir.sqrMagnitude;
-        dir.Normalize();
-        acc = acc + 10 * strength * (dir / sqrDist);
 
+        if (movePhase == lastMovePhase)
+        {
+            acc = Vector3.zero;
+            Vector3 dir = targetNeuron.pos - pos;
+            float sqrDist = dir.sqrMagnitude;
+            dir.Normalize();
+            acc = 10 * strength * dir * (Mathf.Exp(-0.01f * sqrDist));
+        }
+        else
+        {
+            vel = new Vector3(0.0f, gravity, 0.0f);
+        }
     }
 
 

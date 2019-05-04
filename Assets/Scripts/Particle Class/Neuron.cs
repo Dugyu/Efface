@@ -41,28 +41,38 @@ public class Neuron
     public void ChooseChildNeuron(Neuron[] neurons)
     {
         List<int> candidates = new List<int>();
-       
         foreach (Neuron neuron in neurons)
         {
+
             Vector3 dir = neuron.pos - pos;
+
             float sqrDist = dir.sqrMagnitude;
-            if (4 * sqrDist < maxRadius* maxRadius)
-            {
-                candidates.Add(neuron.id);
-            }  
+
+            if ( sqrDist < maxRadius * maxRadius)
+           {
+
+            candidates.Add(neuron.id);
+         }
+
         }
 
-        int countChoices = maxChildCount - minChildCount + 1;
-        int choice = (int)Mathf.Floor(Random.value * countChoices) + minChildCount;
-        int[] selected = new int[choice];
+        if (candidates.Count == 0) return;
 
+        int countChoices = maxChildCount - minChildCount + 1;
+
+
+        int choice = (int)Mathf.Floor(Random.value * countChoices) + minChildCount;
+
+        int[] selected = new int[choice];
         for (int i = 0; i< choice; i++)
-        { 
+        {
+           
             selected[i] = Random.Range(0, candidates.Count);
             Neuron childNeuron = neurons[candidates[selected[i]]];
             childNeurons.Add(childNeuron);
             childNeuron.parentNeurons.Add(this);
             candidates.RemoveAt(selected[i]);
+            if (candidates.Count == 0) return;
         }
 
     }
@@ -75,7 +85,7 @@ public class Neuron
         float r = RandomGaussian(20.0f, 5.0f) + maxRadius * (1.0f - Mathf.Pow(Random.value, 7.0f));
         float x = Mathf.Cos(angle) * r;
         float z = Mathf.Sin(angle) * r;
-        float y = maxheight + maxheight * 0.5f * Mathf.Pow(Random.value, 7.0f) - maxheight * level * 0.2f;
+        float y = 1.5f*maxheight + maxheight * 0.5f * Mathf.Pow(Random.value, 7.0f) - maxheight * level * 0.5f;
         pos = new Vector3(x, y, z);
         obj.transform.position = pos;
         Mood();

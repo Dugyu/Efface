@@ -462,7 +462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acc782dc0fd35aa4786f40a44a9bb0ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strength: 10
+  strength: 20
   memoGraphic: {fileID: 2003162995}
   neuronGraphic: {fileID: 1838004391}
 --- !u!4 &1788138697

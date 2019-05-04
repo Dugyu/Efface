@@ -9,9 +9,9 @@ public class Flow : MonoBehaviour
     public GameObject memoGraphic;
     public GameObject neuronGraphic;
     private TrailRenderer trail;
-    public static int memoCount = 100;
-    public static int neuronCount = 200;
-    public static int layerCount = 4;
+    public static int memoCount = 300;
+    public static int neuronCount =400;
+    public static int layerCount = 5;
     public static int neuronsPerLayer = neuronCount / layerCount;
     private List<Memo> memos = new List<Memo>();
     private Neuron[] neurons = new Neuron[neuronCount];
@@ -32,16 +32,13 @@ public class Flow : MonoBehaviour
                 neurons[(j*neuronsPerLayer) + i] = neuron;
             }   
         }
-
         // construct neuron child and parent relation graph
         for (int j = 0; j < layerCount - 1; j++)
         {
-
-
+            
             Neuron[] neuronsThisLayer = new Neuron[neuronsPerLayer];
             System.Array.Copy(neurons, (j + 1) * neuronsPerLayer, neuronsThisLayer, 0, neuronsPerLayer);
             
-
             if (j == 0)
             {
                 for (int i = 0; i < memoCount; i++)
@@ -59,39 +56,43 @@ public class Flow : MonoBehaviour
             }
 
         }
-        
-
 
     }
 
-    Memo[] branch(Memo m, int branchCount, float branchVel)
-    {
-        Memo[] mb = new Memo[branchCount];
-        Vector3 vz = m.vel;
-        vz.Normalize();
+    //Memo[] branch(Memo m, int branchCount, float branchVel)
+    //{
+    //    Memo[] mb = new Memo[branchCount];
+    //    Vector3 vz = m.vel;
+    //    vz.Normalize();
 
-        Vector3 vx = new Vector3(1.0f, 0.0f, 0.0f);
-        Vector3 vy = Vector3.Cross(vz, vx);
-        vy.Normalize();
-        vx = Vector3.Cross(vy, vz);
+    //    Vector3 vx = new Vector3(1.0f, 0.0f, 0.0f);
+    //    Vector3 vy = Vector3.Cross(vz, vx);
+    //    vy.Normalize();
+    //    vx = Vector3.Cross(vy, vz);
 
-        float angleStep = Mathf.PI * 2.0f / (float)branchCount;
+    //    float angleStep = Mathf.PI * 2.0f / (float)branchCount;
 
-        for(int i=0; i<branchCount; ++i)
-        {
-            Memo mn = new Memo( m.obj);
-            float angle = i * angleStep;
-            Vector3 vperp = vx * Mathf.Cos(angle) + vy * Mathf.Sin(angle);
-            mn.vel = m.vel + vperp * branchVel;
-            mn.pos = m.pos + vperp * 0.0001f;
+    //    for(int i=0; i<branchCount; ++i)
+    //    {
+    //        Memo mn = new Memo( m.obj);
+    //        float angle = i * angleStep;
+    //        Vector3 vperp = vx * Mathf.Cos(angle) + vy * Mathf.Sin(angle);
+    //        mn.vel = m.vel + vperp * branchVel;
+    //        mn.pos = m.pos + vperp * 0.0001f;
 
-            mb[i] = mn;
-        }
-        return mb;
-    }
+    //        mb[i] = mn;
+    //    }
+    //    return mb;
+    //}
     // Update is called once per frame
     void Update()
     {
+
+        foreach (Memo memo in memos)
+        {
+            memo.Attract(strength);
+            memo.Update();
+        }
         //List<Memo> branches = new List<Memo>();
         //foreach (Memo memo in memos)
         //{
@@ -125,10 +126,5 @@ public class Flow : MonoBehaviour
         //    }
         //}
 
-        foreach (Memo memo in memos)
-        {
-            memo.Attract(strength);
-            memo.Update();
-        }
     }
 }
