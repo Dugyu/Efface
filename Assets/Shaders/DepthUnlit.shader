@@ -3,31 +3,51 @@
     Properties
     {
 
-
+		// basic
 	    _MainTex("Texture", 2D) = "white" {}
 		_p1("Param 1", Float) = 1.0
 		_p2("Param 2", Float) = 1.0
 		_color("Color", Color) = (0.8, 0.45, 0.5,1.0)
 		_lightp("Light Position", Vector) = (10.4, 10.6, 10.9, 1.0)
 
-			    
+		// depth color
 		_DepthGradientShallow("Depth Gradient Shallow", Color) = (0.718, 0.173, 0.341, 0.75)
 		_DepthGradientDeep("Depth Gradient Deep", Color) = (0.8, 0.45, 0.5, 0.75)
 		_DepthMaxDistance("Depth Maximum Distance", Float) = 1
- 
+		
+		// noise texture
+		_SurfaceNoise("Surface Noise", 2D) = "white" {}
+		_SurfaceNoiseCutoff("Surface Noise Cutoff", Range(0, 1)) = 0.777
+
+		// shoreline
+		_FoamDistance("Foam Distance", Float) = 5
+		_FoamColor("Foam Color", Color) = (1,1,1,1)
+		// animation
+		_SurfaceNoiseScroll("Surface Noise Scroll Amount", Vector) = (0.03, 0.03, 0, 0)
+
+		// distortion
+		_SurfaceDistortion("Surface Distortion", 2D) = "white" {}	
+		_SurfaceDistortionAmount("Surface Distortion Amount", Range(0, 1)) = 0.27
+
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType"="Transparent" }
         LOD 100
 		Cull Off //Back | Front | Off
 
         Pass
         {
+			Blend SrcAlpha OneMinusSrcAlpha
+            ZWrite Off
+
             CGPROGRAM
+			#define SMOOTHSTEP_AA 0.01
             #pragma vertex vert
             #pragma fragment frag
             #include "UnityCG.cginc"
+
+			
 
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
@@ -36,11 +56,18 @@
 			float4 _color;
 			float3 _lightp;
 
-			float4 _DepthGradientShallow;
-			float4 _DepthGradientDeep;
-			float _DepthMaxDistance;
+			// normal blending
+			float4 alphaBlend(float4 top, float4 bottom)
+			{
+				float3 color = (top.rgb * top.a) + (bottom.rgb * (1 - top.a));
+				float alpha = top.a + bottom.a * (1 - top.a);
+				return float4(color, alpha);
+			}
 
-			sampler2D _CameraDepthTexture;
+
+
+
+
 
 			//Data read from mesh
             struct meshVertexData
@@ -49,9 +76,35 @@
 				float4 n : NORMAL;
                 float2 uv : TEXCOORD0;
             };
+			
+			// depth
+			float4 _DepthGradientShallow;
+			float4 _DepthGradientDeep;
+			float _DepthMaxDistance;
+			sampler2D _CameraDepthTexture;
+
+			// noise
+			sampler2D _SurfaceNoise;
+			float4 _SurfaceNoise_ST;
+			float _SurfaceNoiseCutoff;
+
+			// shoreline
+			float _FoamDistance;
+			float4 _FoamColor;
+
+			// animation
+			float2 _SurfaceNoiseScroll;
+
+			// distortion
+			sampler2D _SurfaceDistortion;
+			float4 _SurfaceDistortion_ST;
+			float _SurfaceDistortionAmount;
 
             struct fragmentData
             {
+			
+				float2 uv : TEXCOORD0;
+
                 float3 obj_n : TEXCOORD1;
 				float3 n : TEXCOORD2;
 				
@@ -61,13 +114,12 @@
 				float4 vp_p : TEXCOORD5;    // viewport coordinates
 				float4 screen_p : SV_POSITION;   
 				
-				float4 screenPosition: TEXCOORD6;  //??? SAMPLE CAMERA TEXTURE
+				float4 screenPos : TEXCOORD6;  //Full scale, not normalized screen space, used to SAMPLE CAMERA TEXTURE
 
-				float2 uv : TEXCOORD0;
+				float2 noiseUV : TEXCOORD7;
+				float2 distortUV : TEXCOORD8;
             };
 
-            //sampler2D _MainTex;
-            //float4 _MainTex_ST;
 
             fragmentData vert (meshVertexData v)
             {
@@ -90,10 +142,11 @@
 
 				//texture coords
                 f.uv =  v.uv;      
-               
-
+				f.noiseUV = TRANSFORM_TEX(v.uv, _SurfaceNoise);
+				f.distortUV = TRANSFORM_TEX(v.uv, _SurfaceDistortion);
 				//SAMPLE CAMERA TEXTURE
-				f.screenPosition = ComputeScreenPos(f.screen_p);   //from homogenous to screen resolution
+				f.screenPos = ComputeScreenPos(f.screen_p);   //from homogenous to screen resolution
+
 
 				return f;
             }
@@ -110,15 +163,30 @@
 				float3 eye = _WorldSpaceCameraPos;      //camera position
 				float t = _Time.y;                      //unity time in seconds since start
 
-
-				float depthNonLinear = tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(f.screenPosition)).r;   //????
+				// depth
+				float depthNonLinear = tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(f.screenPos)).r;   //"r" means rgba  , also can use:  float depth = tex2D(_CameraDepthTexture, i.screenPos.xy / i.screenPos.w).r;
 				float depthLinear = LinearEyeDepth(depthNonLinear);    //when moving further from camera, larger distances are represented by smaller values in the depth buffer.
-				
-				float depthDifference = depthLinear - f.screenPosition.w;
+				float depthDifference = depthLinear - f.screenPos.w;
 				float waterDepthDifference = saturate(depthDifference / _DepthMaxDistance);   //clamps inputs from 0.0 to 1.0
+				// color transition
 				float4 Color = lerp(_DepthGradientShallow, _DepthGradientDeep, waterDepthDifference);
-				 
-                return Color;
+
+				// animation
+				float2 distortSample = (tex2D(_SurfaceDistortion, f.distortUV).xy * 2 - 1) * _SurfaceDistortionAmount;
+				float2 noiseUV = float2((f.noiseUV.x + t * _SurfaceNoiseScroll.x) + distortSample.x, (f.noiseUV.y + t * _SurfaceNoiseScroll.y) + distortSample.y);  
+
+				// noise
+				float surfaceNoiseSample = tex2D(_SurfaceNoise, noiseUV).r;
+				// shoreline
+				float foamNoiseDepth = saturate(depthDifference / _FoamDistance);
+				float surfaceNoiseCutoff = foamNoiseDepth * _SurfaceNoiseCutoff;  // the shallower, the smaller cutoff, the more light pattern
+				// cutoff
+				float surfaceNoise = 0.5f * smoothstep(surfaceNoiseCutoff - SMOOTHSTEP_AA, surfaceNoiseCutoff + SMOOTHSTEP_AA, surfaceNoiseSample);
+
+				// foam Color
+				float4 surfaceNoiseColor = _FoamColor;
+				surfaceNoiseColor.a *= surfaceNoise;
+                return alphaBlend(surfaceNoiseColor, Color);
             }
             ENDCG
         }

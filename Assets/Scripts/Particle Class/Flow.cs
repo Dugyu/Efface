@@ -9,7 +9,7 @@ public class Flow : MonoBehaviour
     public GameObject memoGraphic;
     public GameObject neuronGraphic;
     private TrailRenderer trail;
-    public static int memoCount = 300;
+    public static int memoCount = 100;
     public static int neuronCount = 50;
     public static int layerCount = 5;
     public static int neuronsPerLayer = neuronCount / layerCount;
@@ -41,6 +41,7 @@ public class Flow : MonoBehaviour
         for (int i = 0; i < memoCount; i++)
             {
                 Memo memo = new Memo(memoGraphic);
+                memo.obj.GetComponent<MeshRenderer>().enabled = false;
                 memos.Add(memo);
             }
 
