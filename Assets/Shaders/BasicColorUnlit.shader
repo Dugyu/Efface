@@ -11,7 +11,7 @@
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType"="Transparent" }
         LOD 100
 		Cull Off //Back | Front | Off
 
@@ -92,7 +92,7 @@
 
 
 				float4 color = _color;
-                return color;
+                return tex2D(_MainTex, uv);
             }
             ENDCG
         }

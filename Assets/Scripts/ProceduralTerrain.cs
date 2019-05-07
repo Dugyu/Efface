@@ -205,12 +205,37 @@ public class ProceduralTerrain : MonoBehaviour
         mesh.RecalculateNormals();
     }
 
-    
+
+    void UpdateTerrain()
+    {
+        mesh = GetComponent<MeshFilter>().mesh;
+        verts = mesh.vertices;
+
+        // update vertices position
+        for (int i = 0; i <= mDivision; ++i)
+        {
+            for (int j = 0; j <= mDivision; ++j)
+            {
+
+                float xCoord = (float)j / mDivision;
+                float yCoord = (float)i / mDivision;
+                float height = Mathf.PerlinNoise(xCoord * 4, yCoord * 4) + 0.5f * Mathf.PerlinNoise(xCoord * 8 + 0.5f * Time.timeSinceLevelLoad, yCoord * 8 + 0.5f * Time.timeSinceLevelLoad) + 0.25f * Mathf.PerlinNoise(xCoord * 16, yCoord * 16); // + 0.25f * Mathf.PerlinNoise(xCoord * 32, yCoord * 32) ;
+                height = Mathf.Pow(height, 10);
+                height *= mHeight * 2;
+                verts[i * (divPlusOne) + j] = new Vector3(-halfSize + j * divisionSize, height, halfSize - i * divisionSize);
+            }
+        }
+        // assign back those verts
+        mesh.vertices = verts;
+        mesh.RecalculateBounds();
+
+    }
+
 
     // Update is called once per frame
     void Update()
     {
-        CreateTerrain();
+        UpdateTerrain();
         AddColorTrail();
     }
 }
