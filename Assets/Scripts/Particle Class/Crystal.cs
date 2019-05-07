@@ -8,9 +8,9 @@ public class Crystal
     public Mesh mesh;
 
 
-    public LinkedList<Vector3> pts;
-    public LinkedList<Vector2> ptuvs;
-    public LinkedList<int> pttris;
+    public LinkedList<Vector3> pts = new LinkedList<Vector3>();
+    public LinkedList<Vector2> ptuvs = new LinkedList<Vector2>();
+    public LinkedList<int> pttris = new LinkedList<int>();
     static int maxVerts = 600;
 
 
@@ -34,7 +34,10 @@ public class Crystal
         // uv and triangles can keep the same
         if (pts.Count> maxVerts)
         {
-            for (int i = 0; i < 6; ++i) { pts.RemoveFirst();}
+            for (int i = 0; i < 6; ++i)
+            {
+                pts.RemoveFirst();
+            }
 
             mesh = obj.GetComponent<MeshFilter>().mesh;
             Vector3[] verts = mesh.vertices;

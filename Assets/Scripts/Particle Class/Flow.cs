@@ -17,7 +17,7 @@ public class Flow : MonoBehaviour
     private Neuron[] neurons = new Neuron[neuronCount];
     private Neuron[] neuronFirstLayer = new Neuron[neuronsPerLayer];
 
-
+    public GameObject crystalGraphic;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +42,8 @@ public class Flow : MonoBehaviour
             {
                 Memo memo = new Memo(memoGraphic);
                 memo.obj.GetComponent<MeshRenderer>().enabled = false;
+                memo.InitializeTriBuffer();
+                memo.crystal = new Crystal(crystalGraphic);
                 memos.Add(memo);
             }
 
@@ -87,7 +89,8 @@ public class Flow : MonoBehaviour
     //    }
     //    return mb;
     //}
-    // Update is called once per frame
+
+
     void Update()
     {
 

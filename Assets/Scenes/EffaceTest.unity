@@ -849,7 +849,7 @@ GameObject:
   - component: {fileID: 1201832635}
   - component: {fileID: 1201832637}
   m_Layer: 0
-  m_Name: Triangle
+  m_Name: CrystalEmpty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -921,7 +921,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1201832633}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ec6ba317ced40794f81c891600b8651a, type: 3}
   m_Name: 
@@ -958,6 +958,7 @@ MonoBehaviour:
   strength: 10
   memoGraphic: {fileID: 984821146}
   neuronGraphic: {fileID: 1884738664}
+  crystalGraphic: {fileID: 1201832633}
 --- !u!4 &1788138697
 Transform:
   m_ObjectHideFlags: 0

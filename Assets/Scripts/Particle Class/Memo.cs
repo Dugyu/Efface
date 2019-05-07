@@ -3,10 +3,13 @@ using UnityEngine;
 
 public class Memo
 {
-    public float maxRadius = 60.0f;
-    public float maxheight = 100.0f;
-    public float gravity = -0.5f;
+    // shared
+    static float maxRadius = 60.0f;
+    static float maxheight = 100.0f;
+    static float gravity = -0.5f;
 
+
+    // self
     public GameObject obj;
     public Vector3 pos = Vector3.zero;
     public Vector3 vel = Vector3.zero;
@@ -15,26 +18,36 @@ public class Memo
     public float mood;
     public int id;
 
+
+    // interforce
     public Vector3 interForce = Vector3.zero;
     public Memo targetMem = null;
 
+
+    //find and attract to neuron 
+    static Neuron[] pointerNeurons;
     public Neuron targetNeuron = null;
     public int movePhase = 0;
     public int lastMovePhase = 0;
 
 
-    static Neuron[] pointerNeurons;   
+    // draw triangle fragments
+    public Crystal crystal;
+    public Vector3 lastRecordedPos;
+    public Vector3[] triVertsBuffer = new Vector3[6];
 
 
+    // draw trails
     public LinkedList<Vector3> trail = new LinkedList<Vector3>();
     public LinkedList<float> trailWidth = new LinkedList<float>();
 
-    public bool isEnd = false;
-    public bool isStart = false;
 
+    // limited resources
     static LinkedList<int> unusedIndices = new LinkedList<int>();
     static int lastIndex = 1;
 
+
+    // limited resources
     static int getIndex()
     {
         int idx = 0;
@@ -62,6 +75,9 @@ public class Memo
         pointerNeurons = neurons;
     }
 
+
+
+    // initialize
     public Memo(GameObject _memo)
     {
         
@@ -88,32 +104,23 @@ public class Memo
 
     public void Reset()
     {
-        movePhase = 0;
-        lastMovePhase = 0;
+         movePhase = 0;
+         lastMovePhase = 0;
          ChooseFisrtNode();
+
          pos = targetNeuron.pos;
          pos.y = maxheight + maxheight * 0.5f * Mathf.Pow(Random.value, 7.0f);
+
          vel = new Vector3(0.0f, gravity, 0.0f);
          acc = Vector3.zero;
          obj.transform.position = pos;
-         Mood();
+         //Mood();
+
+         lastRecordedPos = pos;
+          
     }
 
 
-    //public void Reset1()
-    //{
-    //    float angle = Random.value * Mathf.PI * 2;
-    //    float r = RandomGaussian(20.0f, 10.0f) + maxRadius * (1.0f - Mathf.Pow(Random.value, 7.0f));
-    //    float x = Mathf.Cos(angle) * r;
-    //    float z = Mathf.Sin(angle) * r;
-    //    float y = maxheight + maxheight * 0.5f * Mathf.Pow(Random.value, 7.0f);
-
-    //    pos = new Vector3(x, y, z);
-    //    vel = new Vector3(0.0f, gravity, 0.0f);
-    //    acc = Vector3.zero;
-    //    obj.transform.position = pos;
-    //    Mood();
-    //}
 
     public void Mood()
     {
@@ -193,20 +200,21 @@ public class Memo
                 trail = new LinkedList<Vector3>();
                 trailWidth = new LinkedList<float>();
                 Reset();
+                InitializeTriBuffer();
             }
         }
         else
         {
             Move();
             DrawTrail();
+            DrawTriangle();
         }
     }
 
 
     
     public void Move()
-    {
-        
+    {     
         ApplyGravity();
         vel *= 0.8f;
         vel += acc+interForce;
@@ -214,20 +222,68 @@ public class Memo
         obj.transform.position = pos;
     }
 
+
+    public void InitializeTriBuffer()
+    {
+        Vector3 vz = vel;
+        vz.Normalize();
+
+        Vector3 vx = Vector3.right;
+        Vector3 vy = Vector3.Cross(vz, vx);
+        vy.Normalize();
+
+        for (int i = 3; i < 6; ++i)
+        {
+
+            float angle = Random.value * Mathf.PI * 2;
+            Vector3 vperp = vx * Mathf.Cos(angle) + vy * Mathf.Sin(angle);
+            Vector3 pt = pos + vperp * 2.0f * (1.0f - Mathf.Pow(Random.value, 7)) + vz * 5.0f * (1.0f - Mathf.Pow(Random.value, 7));
+            triVertsBuffer[i] = pt;
+        }
+
+
+    }
+
+
+
+    public void DrawTriangle()
+
+    {
+
+        Vector3 dir = pos - lastRecordedPos;
+        if (dir.sqrMagnitude > 25.0f)
+        {
+            Vector3 vz = vel;
+            vz.Normalize();
+
+            Vector3 vx = Vector3.right;
+            Vector3 vy = Vector3.Cross(vz, vx);
+            vy.Normalize();
+
+            for (int i = 0; i < 3; ++i)
+            {
+ 
+                float angle = Random.value * Mathf.PI * 2;
+                Vector3 vperp = vx * Mathf.Cos(angle) + vy * Mathf.Sin(angle);
+                Vector3 pt = pos + vperp * 2.0f *(1.0f - Mathf.Pow(Random.value, 7)) + vz * 5.0f * (1.0f - Mathf.Pow(Random.value, 7));
+                triVertsBuffer[i] = pt;
+                if (i == 2)
+                {
+                    crystal.UpdateMesh(triVertsBuffer);
+                }
+            }
+            lastRecordedPos = pos;
+        }
+        
+    }
+
+
+    
     public void DrawTrail()
     {
 
-        trail.AddLast(pos); 
-
-        if (isEnd == true || isStart == true)
-        {
-            trailWidth.AddLast(0.0f);
-            Debug.Log(trailWidth.Last.Value.ToString());
-        }
-        else
-        {
-            trailWidth.AddLast(0.5f);
-        }
+        trail.AddLast(pos);
+        trailWidth.AddLast(0.5f);
 
         if (trail.Count > 500)
         {
