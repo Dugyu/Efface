@@ -139,7 +139,7 @@ public class ProceduralTerrain : MonoBehaviour
                 Vector3 worldPos = new Vector3(-halfSize + x * pixelSize, 0.0f, -halfSize + y * pixelSize);
 
                 float dist = (worldPos.x - player.position.x) * (worldPos.x - player.position.x) + (worldPos.z - player.position.z) * (worldPos.z - player.position.z);
-                float changeValue = Mathf.Pow(2.71828f, -0.1f * dist);
+                float changeValue = Mathf.Pow(2, -0.1f * dist);
                 int index = y * texture.width + x;
 
                 Color original = texColor[index];

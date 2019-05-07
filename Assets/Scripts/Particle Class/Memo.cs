@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Memo
@@ -24,7 +23,7 @@ public class Memo
     public int lastMovePhase = 0;
 
 
-    static Neuron[] pointerNeurons;
+    static Neuron[] pointerNeurons;   
 
 
     public LinkedList<Vector3> trail = new LinkedList<Vector3>();
@@ -74,7 +73,7 @@ public class Memo
     public void Release()
     {
         releaseIndex(id);
-        GameObject.Destroy(obj);
+        Object.Destroy(obj);
         obj = null;
     }
 
