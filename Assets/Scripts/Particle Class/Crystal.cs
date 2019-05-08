@@ -17,13 +17,13 @@ public class Crystal
     public Crystal(GameObject _empty)
     {
         obj = Object.Instantiate(_empty);
-        mesh = new Mesh();
-        obj.GetComponent<MeshFilter>().mesh = mesh;
+
     }
 
 
     public void UpdateMesh(Vector3[] newVerts)
     {
+       
         pts.AddLast(newVerts[0]);
         pts.AddLast(newVerts[3]);
         pts.AddLast(newVerts[4]);
@@ -55,6 +55,9 @@ public class Crystal
         // uv and triangle also need to add more items
         else
         {
+            mesh = new Mesh();
+            obj.GetComponent<MeshFilter>().mesh = mesh;
+
             ptuvs.AddLast( new Vector2(0, 0));
             ptuvs.AddLast(new Vector2(0.5f, 1.0f));
             ptuvs.AddLast(new Vector2(1.0f, 0.0f));
@@ -62,7 +65,12 @@ public class Crystal
             ptuvs.AddLast(new Vector2(0.5f, 1.0f));
             ptuvs.AddLast(new Vector2(1.0f, 0.0f));
 
-            mesh = obj.GetComponent<MeshFilter>().mesh;
+            pttris.AddLast(pttris.Count);
+            pttris.AddLast(pttris.Count);
+            pttris.AddLast(pttris.Count);
+            pttris.AddLast(pttris.Count);
+            pttris.AddLast(pttris.Count);
+            pttris.AddLast(pttris.Count);
 
             Vector3[] verts = new Vector3[pts.Count];
             Vector2[] uvs = new Vector2[pts.Count];
@@ -86,6 +94,7 @@ public class Crystal
                     j++;
                 }
             }
+
             mesh.vertices = verts;
             mesh.uv = uvs;
             mesh.triangles = tris;

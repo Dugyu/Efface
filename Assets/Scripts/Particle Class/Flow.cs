@@ -9,7 +9,7 @@ public class Flow : MonoBehaviour
     public GameObject memoGraphic;
     public GameObject neuronGraphic;
     private TrailRenderer trail;
-    public static int memoCount = 100;
+    public static int memoCount = 50;
     public static int neuronCount = 50;
     public static int layerCount = 5;
     public static int neuronsPerLayer = neuronCount / layerCount;
