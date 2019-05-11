@@ -204,7 +204,7 @@ public class Memo
         else
         {
             Move();
-            //DrawTrail();
+            DrawTrail();
             DrawTriangle();
         }
     }
@@ -249,7 +249,7 @@ public class Memo
     {
 
         Vector3 dir = pos - lastRecordedPos;
-        if (dir.sqrMagnitude > 9.0f)
+        if (dir.sqrMagnitude > 4.0f)
         {
             Vector3 vz = vel;
             vz.Normalize();
@@ -263,7 +263,7 @@ public class Memo
  
                 float angle = Random.value * Mathf.PI * 2;
                 Vector3 vperp = vx * Mathf.Cos(angle) + vy * Mathf.Sin(angle);
-                Vector3 pt = pos + vperp * 1.0f *(1.0f - Mathf.Pow(Random.value, 7)) + vz * 1.0f * (1.0f - Mathf.Pow(Random.value, 7));
+                Vector3 pt = pos + vperp * 0.1f *(1.0f - Mathf.Pow(Random.value, 7)) + vz * 0.5f * (1.0f - Mathf.Pow(Random.value, 7));
                 triVertsBuffer[i] = pt;
                 if (i == 2)
                 {

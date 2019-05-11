@@ -48,8 +48,9 @@
 
 
 			half4 frag(VertOutput i): COLOR{
-				
+
 				return _Color +  tex2D(_MainTex,i.uv) + tex2D(_SecondTex,i.uv);
+
 			}
 
 		ENDCG

@@ -11,9 +11,12 @@
     }
     SubShader
     {
-        Tags { "RenderType"="Transparent" }
+        Tags { "Queue"="Transparent" "RenderType"="Transparent" }
         LOD 100
-		Cull Off //Back | Front | Off
+		//Cull Off //Back | Front | Off
+
+		ZWrite Off
+        Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
         {
@@ -67,7 +70,7 @@
 				f.n = mul(unity_ObjectToWorld, v.n);    //world space
 
 				//distortion  [optional]
-				f.p += cos(f.p*_p1+ _Time.y)*_p2;                  //offset point along  world normal
+				f.p += sin(f.p*_p1+ _Time.y)*_p2;                  //offset point along  world normal
 
 				//projection
                 f.screen_p = mul(UNITY_MATRIX_VP, float4(f.p, 1.0));     //screen space
@@ -93,8 +96,8 @@
 				float d=length(eye-p);
 
 				float4 color = _color;
-				color.rgb*=d*0.1f;
-
+				color.rgb *=d*0.1f;
+				color.a = 0.25;
                 return color;//tex2D(_MainTex, uv);
             }
             ENDCG

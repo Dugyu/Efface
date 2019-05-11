@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 public class ProceduralTerrain : MonoBehaviour
 {
     //serialize for terrain
@@ -52,9 +50,6 @@ public class ProceduralTerrain : MonoBehaviour
         CreateTerrain();
         //meshc = gameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
         //meshc.sharedMesh = mesh;
-
-
- 
 
         //initial texture
         texture = new Texture2D(texSize, texSize);
@@ -170,7 +165,7 @@ public class ProceduralTerrain : MonoBehaviour
 
                 float xCoord = (float)j / mDivision;
                 float yCoord = (float)i / mDivision;
-                float height = Mathf.PerlinNoise(xCoord * 4, yCoord * 4) + 0.5f * Mathf.PerlinNoise(xCoord * 8 + 0.5f * Time.timeSinceLevelLoad, yCoord * 8 + 0.5f * Time.timeSinceLevelLoad) + 0.25f * Mathf.PerlinNoise(xCoord * 16, yCoord * 16); // + 0.25f * Mathf.PerlinNoise(xCoord * 32, yCoord * 32) ;
+                float height = Mathf.PerlinNoise(xCoord * 4, yCoord * 4) + 0.5f * Mathf.PerlinNoise(xCoord * 8 + 0.5f * Time.timeSinceLevelLoad, yCoord * 8 + 0.5f * Time.timeSinceLevelLoad) + 0.5f * Mathf.PerlinNoise(xCoord * 16, yCoord * 16); // + 0.25f * Mathf.PerlinNoise(xCoord * 32, yCoord * 32) ;
                 height = Mathf.Pow(height, 10);
                 height *= mHeight * 2;
 
@@ -235,7 +230,7 @@ public class ProceduralTerrain : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateTerrain();
+        //UpdateTerrain();
         AddColorTrail();
     }
 }

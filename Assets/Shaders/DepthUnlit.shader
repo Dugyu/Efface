@@ -20,7 +20,8 @@
 		_SurfaceNoiseCutoff("Surface Noise Cutoff", Range(0, 1)) = 0.777
 
 		// shoreline
-		_FoamDistance("Foam Distance", Float) = 5
+		_FoamMaxDistance("Foam Max Distance", Float) = 5
+		_FoamMinDistance("Foam Min Distance", Float) = 0.04
 		_FoamColor("Foam Color", Color) = (1,1,1,1)
 		// animation
 		_SurfaceNoiseScroll("Surface Noise Scroll Amount", Vector) = (0.03, 0.03, 0, 0)
@@ -32,7 +33,7 @@
     }
     SubShader
     {
-        Tags { "RenderType"="Transparent" }
+        Tags { "RenderType"="Transparent" "Queue" = "Transparent" }
         LOD 100
 		Cull Off //Back | Front | Off
 
@@ -89,7 +90,8 @@
 			float _SurfaceNoiseCutoff;
 
 			// shoreline
-			float _FoamDistance;
+			float _FoamMaxDistance;
+			float _FoamMinDistance;
 			float4 _FoamColor;
 
 			// animation
@@ -100,6 +102,10 @@
 			float4 _SurfaceDistortion_ST;
 			float _SurfaceDistortionAmount;
 
+			// normalize foam
+			sampler2D _CameraNormalsTexture;
+
+
             struct fragmentData
             {
 			
@@ -107,6 +113,7 @@
 
                 float3 obj_n : TEXCOORD1;
 				float3 n : TEXCOORD2;
+				float3 viewNormal: TEXCOORD9;
 				
 				float3 obj_p : TEXCOORD3;
 				float3 p : TEXCOORD4;
@@ -118,6 +125,7 @@
 
 				float2 noiseUV : TEXCOORD7;
 				float2 distortUV : TEXCOORD8;
+
             };
 
 
@@ -132,7 +140,7 @@
 				//vertex normal
 				f.obj_n = v.n;                           //object space
 				f.n = mul(unity_ObjectToWorld, v.n);    //world space
-
+				f.viewNormal = UnityObjectToViewPos(v.n);
 				//distortion  [optional]
 				//f.p += f.n *_p1                       //offset point along  world normal
 
@@ -144,7 +152,8 @@
                 f.uv =  v.uv;      
 				f.noiseUV = TRANSFORM_TEX(v.uv, _SurfaceNoise);
 				f.distortUV = TRANSFORM_TEX(v.uv, _SurfaceDistortion);
-				//SAMPLE CAMERA TEXTURE
+				
+				//SAMPLE CAMERA DEPTH TEXTURE
 				f.screenPos = ComputeScreenPos(f.screen_p);   //from homogenous to screen resolution
 
 
@@ -166,6 +175,8 @@
 				// depth
 				float depthNonLinear = tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(f.screenPos)).r;   //"r" means rgba  , also can use:  float depth = tex2D(_CameraDepthTexture, i.screenPos.xy / i.screenPos.w).r;
 				float depthLinear = LinearEyeDepth(depthNonLinear);    //when moving further from camera, larger distances are represented by smaller values in the depth buffer.
+				
+
 				float depthDifference = depthLinear - f.screenPos.w;
 				float waterDepthDifference = saturate(depthDifference / _DepthMaxDistance);   //clamps inputs from 0.0 to 1.0
 				// color transition
@@ -177,8 +188,14 @@
 
 				// noise
 				float surfaceNoiseSample = tex2D(_SurfaceNoise, noiseUV).r;
+				
+				//normalize shoreline
+				float3 existingNormal = tex2Dproj(_CameraNormalsTexture, UNITY_PROJ_COORD(f.screenPos));
+				float3 normalDot = saturate(dot(existingNormal, f.viewNormal));
+				float foamDistance = lerp(_FoamMaxDistance, _FoamMinDistance, normalDot);				
+
 				// shoreline
-				float foamNoiseDepth = saturate(depthDifference / _FoamDistance);
+				float foamNoiseDepth = saturate(depthDifference / foamDistance);
 				float surfaceNoiseCutoff = foamNoiseDepth * _SurfaceNoiseCutoff;  // the shallower, the smaller cutoff, the more light pattern
 				// cutoff
 				float surfaceNoise = 0.5f * smoothstep(surfaceNoiseCutoff - SMOOTHSTEP_AA, surfaceNoiseCutoff + SMOOTHSTEP_AA, surfaceNoiseSample);

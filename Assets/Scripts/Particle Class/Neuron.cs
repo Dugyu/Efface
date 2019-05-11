@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Neuron 
 {
-    static float maxRadius = 60.0f;
+    static float maxRadius = 200.0f;
     static float maxheight = 20.0f;
     public GameObject obj;
     public Vector3 pos = Vector3.zero;
