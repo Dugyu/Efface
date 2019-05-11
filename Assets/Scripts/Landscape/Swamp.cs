@@ -55,7 +55,7 @@ public class Swamp : MonoBehaviour
 
                 float xCoord = (float)j / mDivision;
                 float yCoord = (float)i / mDivision;
-                float height = Mathf.PerlinNoise(xCoord * 4, yCoord * 4) + 0.5f * Mathf.PerlinNoise(xCoord * 8 + 0.5f * Time.timeSinceLevelLoad, yCoord * 8 + 0.5f * Time.timeSinceLevelLoad) + 0.5f * Mathf.PerlinNoise(xCoord * 16, yCoord * 16); // + 0.25f * Mathf.PerlinNoise(xCoord * 32, yCoord * 32) ;
+                float height = 0.5f* Mathf.PerlinNoise(xCoord * 4, yCoord * 4) + 0.25f * Mathf.PerlinNoise(xCoord * 8 + 0.5f * Time.timeSinceLevelLoad, yCoord * 8 + 0.5f * Time.timeSinceLevelLoad) ;
                 height = Mathf.Pow(height, 10);
                 height *= mHeight * 2;
 
@@ -104,7 +104,7 @@ public class Swamp : MonoBehaviour
 
                 float xCoord = (float)j / mDivision;
                 float yCoord = (float)i / mDivision;
-                float height = 0.5f * Mathf.PerlinNoise(xCoord * 4, yCoord * 4) + 0.25f * Mathf.PerlinNoise(xCoord * 8 + 0.5f * Time.timeSinceLevelLoad, yCoord * 8 + 0.5f * Time.timeSinceLevelLoad)  ;
+                float height = 0.5f * Mathf.PerlinNoise(xCoord * 4, yCoord * 4) + 0.5f * Mathf.PerlinNoise(xCoord * 8 + 0.5f * Time.timeSinceLevelLoad, yCoord * 8 + 0.5f * Time.timeSinceLevelLoad)  ;
                 height = Mathf.Pow(height, 10);
                 height *= mHeight * 2;
                 verts[i * (divPlusOne) + j] = new Vector3(-halfSize + j * divisionSize, height, halfSize - i * divisionSize);

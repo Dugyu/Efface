@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StaticTexture : MonoBehaviour
 {
-    private static int texSize = 1024;
+    private static int texSize = 2048;
     Color[] texColor = new Color[texSize * texSize];
     private Texture2D texture;
 

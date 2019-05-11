@@ -25,14 +25,11 @@ public class ProceduralTerrain : MonoBehaviour
     private int[] rowTable;
     private int[] colTable;
     private float pixelSize;
-
-
     public Color colorA;
 
     //Get Player Position
     public Transform player;
 
- 
 
     void Start()
     {
@@ -56,11 +53,11 @@ public class ProceduralTerrain : MonoBehaviour
         Color[] texColor = new Color[texSize * texSize];
         pixelSize = mSize / texSize;
 
-        //fetch renderer
-        m_Renderer = GetComponent<Renderer>();
-        m_Renderer.material.SetTexture("_SecondTex",texture);
+        ////fetch renderer
+        //m_Renderer = GetComponent<Renderer>();
+        //m_Renderer.material.SetTexture("_SecondTex", texture);
 
-        SetBlack();
+        //SetBlack();
     }
 
     void FillLookTable()
@@ -78,41 +75,18 @@ public class ProceduralTerrain : MonoBehaviour
             }
         }
     }
-
     void SetBlack()
     {
         for (int i=0; i< texColor.Length; i++)
         {
             texColor[i] = new Color(0.0f, 0.0f, 0.0f, 0.0f);
         }
+        texture.SetPixels(texColor);
+        texture.Apply();
     }
-
-    //void SetOriginalColor()
-    //{
-    //    //float noiseScale = 0.003f;
-    //    //// initial color
-    //    //for (int y = 0; y < texture.height; y++)
-    //    //{
-    //    //    for (int x = 0; x < texture.width; x++)
-    //    //    {
-    //    //        float t = Mathf.PerlinNoise(x * noiseScale, y * noiseScale);
-    //    //        float r = Mathf.Lerp(colorA.r, colorB.r, t);
-    //    //        float g = Mathf.Lerp(colorA.g, colorB.g, t);
-    //    //        float b = Mathf.Lerp(colorA.b, colorB.b, t);
-    //    //        Color colorC = new Color(r, g, b);
-    //    //        int index = (texture.height - y - 1) * texture.width + x;
-    //    //        texColor[index] = colorC;
-    //    //    }
-    //    //}
-
-    //    //texture.SetPixels(texColor);
-    //    //texture.Apply();
-    //}
-
-
     void AddColorTrail()
     {
-        colorA.r += Mathf.Sin(Time.deltaTime) * Random.value;
+        //colorA.r += Mathf.Sin(Time.deltaTime) * Random.value;
 
         int xPlayer = (int)Mathf.Floor((player.position.x + halfSize) / pixelSize);
         int yPlayer = (int)Mathf.Floor((player.position.z + halfSize) / pixelSize);
@@ -165,13 +139,13 @@ public class ProceduralTerrain : MonoBehaviour
 
                 float xCoord = (float)j / mDivision;
                 float yCoord = (float)i / mDivision;
-                float height = Mathf.PerlinNoise(xCoord * 4, yCoord * 4) + 0.5f * Mathf.PerlinNoise(xCoord * 8 + 0.5f * Time.timeSinceLevelLoad, yCoord * 8 + 0.5f * Time.timeSinceLevelLoad) + 0.5f * Mathf.PerlinNoise(xCoord * 16, yCoord * 16); // + 0.25f * Mathf.PerlinNoise(xCoord * 32, yCoord * 32) ;
-                height = Mathf.Pow(height, 10);
-                height *= mHeight * 2;
+                float height = 2*Mathf.PerlinNoise(xCoord * 4, yCoord * 4) + 0.375f * Mathf.PerlinNoise(xCoord * 8 + 0.75f * Time.timeSinceLevelLoad, yCoord * 8 + 0.5f * Time.timeSinceLevelLoad) + 0.375f * Mathf.PerlinNoise(xCoord * 16, yCoord * 16) + 0.125f * Mathf.PerlinNoise(xCoord * 32, yCoord * 32) ;
+                height = Mathf.Pow(height, 3);
+                height *= mHeight * 5;
 
 
                 verts[i * (divPlusOne) + j] = new Vector3(-halfSize + j * divisionSize, height, halfSize - i * divisionSize);
-                uvs[i * (divPlusOne) + j] = new Vector2((float)j / mDivision, (float)i / mDivision);
+                uvs[i * (divPlusOne) + j] = new Vector2((float)j / mDivision, 1.0f- (float)i / mDivision);
 
                 if (i < mDivision && j < mDivision)
                 {
@@ -199,8 +173,6 @@ public class ProceduralTerrain : MonoBehaviour
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
     }
-
-
     void UpdateTerrain()
     {
         mesh = GetComponent<MeshFilter>().mesh;
@@ -230,7 +202,7 @@ public class ProceduralTerrain : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //UpdateTerrain();
-        AddColorTrail();
+        player.localScale = new Vector3(10.0f * Mathf.Sin(Time.realtimeSinceStartup),5.0f * Mathf.Sin(Time.realtimeSinceStartup), 8.0f* Mathf.Sin(Time.realtimeSinceStartup));
+        player.gameObject.GetComponent<MeshRenderer>().material.color = new Color(Mathf.Sin(Time.realtimeSinceStartup) * 0.72f, 0.267f,0.267f);
     }
 }

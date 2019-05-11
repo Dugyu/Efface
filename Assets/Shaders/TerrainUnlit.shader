@@ -2,10 +2,10 @@
 {
     Properties
     {  
-		_MainTex ("Albedo", 2D) = "white" {}
-		_SecondTex("Albedo", 2D) = "white"{}
+		_MainTex ("MainTex", 2D) = "white" {}
+		_SecondTex("SecondTex", 2D) = "white"{}
         _Color ("Color", Color) = (0,0,0,0)
-		_Player("Player Postion", vector) = (0,0,0,0)
+		//_Player("Player Postion", vector) = (0,0,0,0)
         //_Glossiness ("Smoothness", Range(0,1)) = 0.5
         //_Metallic ("Metallic", Range(0,1)) = 0.0
     }
@@ -49,7 +49,7 @@
 
 			half4 frag(VertOutput i): COLOR{
 
-				return _Color +  tex2D(_MainTex,i.uv) + tex2D(_SecondTex,i.uv);
+				return tex2D(_MainTex,i.uv) + tex2D(_SecondTex,i.uv);
 
 			}
 
