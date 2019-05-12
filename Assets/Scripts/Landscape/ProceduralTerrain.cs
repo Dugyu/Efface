@@ -14,8 +14,8 @@ public class ProceduralTerrain : MonoBehaviour
 
     private float halfSize;  
     private float divisionSize;
-    //private MeshCollider meshc;
-    // Start is called before the first frame update
+
+    public MeshCollider meshc;
 
     //serial for texture
     private Texture2D texture;
@@ -45,13 +45,23 @@ public class ProceduralTerrain : MonoBehaviour
         tris = new int[mDivision * mDivision * 6];
 
         CreateTerrain();
-        //meshc = gameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
-        //meshc.sharedMesh = mesh;
 
-        //initial texture
-        texture = new Texture2D(texSize, texSize);
-        Color[] texColor = new Color[texSize * texSize];
-        pixelSize = mSize / texSize;
+
+
+        meshc = gameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
+        meshc.sharedMesh = mesh;
+
+
+
+
+
+
+
+
+        ////initial texture
+        //texture = new Texture2D(texSize, texSize);
+        //Color[] texColor = new Color[texSize * texSize];
+        //pixelSize = mSize / texSize;
 
         ////fetch renderer
         //m_Renderer = GetComponent<Renderer>();
@@ -60,69 +70,69 @@ public class ProceduralTerrain : MonoBehaviour
         //SetBlack();
     }
 
-    void FillLookTable()
-    {
-        rowTable = new int[texSize * texSize];
-        colTable = new int[texSize * texSize];
+    //void FillLookTable()
+    //{
+    //    rowTable = new int[texSize * texSize];
+    //    colTable = new int[texSize * texSize];
 
-        for (int y = 0; y< texSize; y++)
-        {
-            for (int x = 0; x< texSize; x++)
-            {
-                int id = (texSize - y - 1) * texSize + x;
-                colTable[id] = x;
-                rowTable[id] = y;
-            }
-        }
-    }
-    void SetBlack()
-    {
-        for (int i=0; i< texColor.Length; i++)
-        {
-            texColor[i] = new Color(0.0f, 0.0f, 0.0f, 0.0f);
-        }
-        texture.SetPixels(texColor);
-        texture.Apply();
-    }
-    void AddColorTrail()
-    {
-        //colorA.r += Mathf.Sin(Time.deltaTime) * Random.value;
+    //    for (int y = 0; y< texSize; y++)
+    //    {
+    //        for (int x = 0; x< texSize; x++)
+    //        {
+    //            int id = (texSize - y - 1) * texSize + x;
+    //            colTable[id] = x;
+    //            rowTable[id] = y;
+    //        }
+    //    }
+    //}
+    //void SetBlack()
+    //{
+    //    for (int i=0; i< texColor.Length; i++)
+    //    {
+    //        texColor[i] = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+    //    }
+    //    texture.SetPixels(texColor);
+    //    texture.Apply();
+    //}
+    //void AddColorTrail()
+    //{
+    //    //colorA.r += Mathf.Sin(Time.deltaTime) * Random.value;
 
-        int xPlayer = (int)Mathf.Floor((player.position.x + halfSize) / pixelSize);
-        int yPlayer = (int)Mathf.Floor((player.position.z + halfSize) / pixelSize);
+    //    int xPlayer = (int)Mathf.Floor((player.position.x + halfSize) / pixelSize);
+    //    int yPlayer = (int)Mathf.Floor((player.position.z + halfSize) / pixelSize);
 
-        for (int y = 0; y < texture.height; y++)
-        {
-            if (Mathf.Abs(y - yPlayer) > 20)
-            {
-                continue;
-            }
+    //    for (int y = 0; y < texture.height; y++)
+    //    {
+    //        if (Mathf.Abs(y - yPlayer) > 20)
+    //        {
+    //            continue;
+    //        }
 
-            for (int x = 0; x < texture.width; x++)
-            {
-                if (Mathf.Abs(x - xPlayer) > 20)
-                {
-                    continue;
-                }
+    //        for (int x = 0; x < texture.width; x++)
+    //        {
+    //            if (Mathf.Abs(x - xPlayer) > 20)
+    //            {
+    //                continue;
+    //            }
 
-                Vector3 worldPos = new Vector3(-halfSize + x * pixelSize, 0.0f, -halfSize + y * pixelSize);
+    //            Vector3 worldPos = new Vector3(-halfSize + x * pixelSize, 0.0f, -halfSize + y * pixelSize);
 
-                float dist = (worldPos.x - player.position.x) * (worldPos.x - player.position.x) + (worldPos.z - player.position.z) * (worldPos.z - player.position.z);
-                float changeValue = Mathf.Pow(2, -0.1f * dist);
-                int index = y * texture.width + x;
+    //            float dist = (worldPos.x - player.position.x) * (worldPos.x - player.position.x) + (worldPos.z - player.position.z) * (worldPos.z - player.position.z);
+    //            float changeValue = Mathf.Pow(2, -0.1f * dist);
+    //            int index = y * texture.width + x;
 
-                Color original = texColor[index];
-                float r = Mathf.Lerp(original.r, colorA.r, changeValue);
-                float g = Mathf.Lerp(original.g,colorA.g,changeValue);
-                float b = Mathf.Lerp(original.b, colorA.b, changeValue);
-                Color changeColor = new Color(r, g, b,1.0f);
-                texColor[index] = changeColor;
-            }
-        }
+    //            Color original = texColor[index];
+    //            float r = Mathf.Lerp(original.r, colorA.r, changeValue);
+    //            float g = Mathf.Lerp(original.g,colorA.g,changeValue);
+    //            float b = Mathf.Lerp(original.b, colorA.b, changeValue);
+    //            Color changeColor = new Color(r, g, b,1.0f);
+    //            texColor[index] = changeColor;
+    //        }
+    //    }
 
-        texture.SetPixels(texColor);
-        texture.Apply();
-    }
+    //    texture.SetPixels(texColor);
+    //    texture.Apply();
+    //}
 
 
     void CreateTerrain()
@@ -199,7 +209,6 @@ public class ProceduralTerrain : MonoBehaviour
     }
 
 
-    // Update is called once per frame
     void Update()
     {
         player.localScale = new Vector3(20.0f * Mathf.Sin(Time.realtimeSinceStartup),10.0f * Mathf.Sin(Time.realtimeSinceStartup), 16.0f* Mathf.Sin(Time.realtimeSinceStartup));
