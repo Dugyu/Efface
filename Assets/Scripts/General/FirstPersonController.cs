@@ -7,8 +7,8 @@ public class FirstPersonController : MonoBehaviour {
 
     void Start () {
         // Turn off Mouse Cursor
-        Cursor.lockState = CursorLockMode.Locked;
-    
+        Cursor.visible = false;
+
         directions = new Dictionary<KeyCode, Vector3>()
         {
             { KeyCode.W, Vector3.forward},
@@ -26,9 +26,12 @@ public class FirstPersonController : MonoBehaviour {
         float speed = 5;
         foreach (KeyCode direction in directions.Keys) {
             if (Input.GetKey(direction)) {
-               this.transform.Translate(directions[direction] * speed * Time.deltaTime, Space.Self);
+                //Cursor.lockState = CursorLockMode.Locked;
+
+                this.transform.Translate(directions[direction] * speed * Time.deltaTime, Space.Self);
             }
         }
+        Cursor.lockState = CursorLockMode.None;
 
         // Exit Application
         if (Input.GetKey("escape"))

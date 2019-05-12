@@ -16,7 +16,7 @@ public class Crystal
     public Crystal(GameObject _empty)
     {
         obj = Object.Instantiate(_empty);
-        meshc = obj.AddComponent(typeof(MeshCollider)) as MeshCollider;
+        //meshc = obj.AddComponent(typeof(MeshCollider)) as MeshCollider;
 
     }
 
@@ -61,7 +61,7 @@ public class Crystal
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
 
-            meshc.sharedMesh = mesh;
+            //meshc.sharedMesh = mesh;
         }
 
         // uv and triangle also need to add more items
@@ -117,7 +117,7 @@ public class Crystal
             mesh.RecalculateBounds();
 
 
-            meshc.sharedMesh = mesh;
+            //meshc.sharedMesh = mesh;
 
         }
 

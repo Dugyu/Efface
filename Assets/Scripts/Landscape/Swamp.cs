@@ -19,7 +19,10 @@ public class Swamp : MonoBehaviour
     private float halfSize;
     private float divisionSize;
 
+    // collider
+    public MeshCollider meshc;
 
+   
 
 
 
@@ -37,6 +40,9 @@ public class Swamp : MonoBehaviour
         tris = new int[mDivision * mDivision * 6];
 
         CreateTerrain();
+
+        meshc = gameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
+        meshc.sharedMesh = mesh;
 
     }
 
@@ -103,7 +109,8 @@ public class Swamp : MonoBehaviour
 
                 float xCoord = (float)j / mDivision;
                 float yCoord = (float)i / mDivision;
-                float height = 0.5f * Mathf.PerlinNoise(xCoord * 4, yCoord * 4) + 0.5f * Mathf.PerlinNoise(xCoord * 8 + 0.5f * Time.timeSinceLevelLoad, yCoord * 8 + 0.5f * Time.timeSinceLevelLoad)  ;
+
+                float height = 0.5f * Mathf.PerlinNoise(xCoord * 4, yCoord * 4) + 0.25f * Mathf.PerlinNoise(xCoord * 8 + 0.5f * Time.timeSinceLevelLoad, yCoord * 8 + 0.5f * Time.timeSinceLevelLoad);
                 height = Mathf.Pow(height, 10);
                 height *= mHeight * 2;
                 verts[i * (divPlusOne) + j] = new Vector3(-halfSize + j * divisionSize, height, halfSize - i * divisionSize);
@@ -112,7 +119,7 @@ public class Swamp : MonoBehaviour
         // assign back those verts
         mesh.vertices = verts;
         mesh.RecalculateBounds();
-
+        mesh.RecalculateNormals();
     }
 
     void Update()

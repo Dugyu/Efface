@@ -444,7 +444,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a606c1a022a65994097a92602b11760b, type: 3}
   m_Name: 
@@ -1081,7 +1081,7 @@ GameObject:
   - component: {fileID: 1201832635}
   m_Layer: 0
   m_Name: CrystalEmpty
-  m_TagString: Untagged
+  m_TagString: Crystal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5951,6 +5951,7 @@ GameObject:
   - component: {fileID: 1788138697}
   - component: {fileID: 1788138696}
   - component: {fileID: 1788138698}
+  - component: {fileID: 1788138699}
   m_Layer: 0
   m_Name: Scripting
   m_TagString: Untagged
@@ -5995,12 +5996,29 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1788138695}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd95cfd9b8630ab4cb6b35b263561edc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 534669904}
+  player: {fileID: 245713643}
+  targettingSpeed: 0.01
+--- !u!114 &1788138699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1788138695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e990110f4283f645b8fd3bb795452bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 534669904}
+  player: {fileID: 245713643}
+  targettingSpeed: 0.01
 --- !u!1 &1883210796
 GameObject:
   m_ObjectHideFlags: 0
@@ -6015,7 +6033,7 @@ GameObject:
   - component: {fileID: 1883210800}
   m_Layer: 0
   m_Name: Swamp
-  m_TagString: Untagged
+  m_TagString: Swamp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6094,6 +6112,7 @@ MonoBehaviour:
   mDivision: 128
   mSize: 1024
   mHeight: 1
+  meshc: {fileID: 0}
 --- !u!1 &1884738664
 GameObject:
   m_ObjectHideFlags: 0
@@ -6109,7 +6128,7 @@ GameObject:
   - component: {fileID: 1884738665}
   m_Layer: 0
   m_Name: NeuronQuad
-  m_TagString: Untagged
+  m_TagString: Neuron
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
