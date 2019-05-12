@@ -4,10 +4,7 @@
     {  
 		_MainTex ("MainTex", 2D) = "white" {}
 		_SecondTex("SecondTex", 2D) = "white"{}
-        _Color ("Color", Color) = (0,0,0,0)
-		//_Player("Player Postion", vector) = (0,0,0,0)
-        //_Glossiness ("Smoothness", Range(0,1)) = 0.5
-        //_Metallic ("Metallic", Range(0,1)) = 0.0
+
     }
     SubShader
     {
@@ -32,7 +29,7 @@
 			float4 _MainTex_ST;
 			sampler2D _SecondTex;
 			float4 _SecondTex_ST;
-			half4 _Color;
+
 
 			struct VertOutput{
 				float4 pos: SV_POSITION;

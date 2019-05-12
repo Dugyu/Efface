@@ -10,12 +10,15 @@ public class StaticTexture : MonoBehaviour
 
     public Color colorA;
     public Color colorB;
+
+    public GameObject Crystal;
+
     void Start()
     {
         // initialize
         texture = new Texture2D(texSize, texSize);
         GetComponent<Renderer>().material.mainTexture = texture;
-
+        Crystal.GetComponent<Renderer>().material.mainTexture = texture;
         float noiseScale = 0.003f;
         // initial color
         for (int y = 0; y < texture.height; y++)

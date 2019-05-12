@@ -204,7 +204,7 @@ public class Memo
         else
         {
             Move();
-            DrawTrail();
+            //DrawTrail();
             DrawTriangle();
         }
     }
@@ -263,7 +263,7 @@ public class Memo
  
                 float angle = Random.value * Mathf.PI * 2;
                 Vector3 vperp = vx * Mathf.Cos(angle) + vy * Mathf.Sin(angle);
-                Vector3 pt = pos + vperp * 0.1f *(1.0f - Mathf.Pow(Random.value, 7)) + vz * 0.5f * (1.0f - Mathf.Pow(Random.value, 7));
+                Vector3 pt = pos + vperp * 1.0f *(1.0f - Mathf.Pow(Random.value, 7)) + vz * 0.5f * (1.0f - Mathf.Pow(Random.value, 7));
                 triVertsBuffer[i] = pt;
                 if (i == 2)
                 {

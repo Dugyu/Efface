@@ -70,7 +70,7 @@
 				f.n = mul(unity_ObjectToWorld, v.n);    //world space
 
 				//distortion  [optional]
-				f.p += sin(f.p*_p1+ _Time.y)*_p2;                  //offset point along  world normal
+				//f.p += sin(f.p*_p1+ _Time.y)*_p2;                  //offset point along  world normal
 
 				//projection
                 f.screen_p = mul(UNITY_MATRIX_VP, float4(f.p, 1.0));     //screen space
@@ -93,12 +93,11 @@
 				float3 eye = _WorldSpaceCameraPos;      //camera position
 				float t = _Time.y;                      //unity time in seconds since start
 
-				float d=length(eye-p);
-
+				float d = length(eye-p);
 				float4 color = _color;
-				color.rgb *=d*0.1f;
-				color.a = 0.25;
-                return color *= tex2D(_MainTex, uv);
+				color = tex2D(_MainTex,uv) + tex2D(_SecondTex,uv);
+				color.rgb +=d*0.0005f;
+                return color;
             }
             ENDCG
 		}

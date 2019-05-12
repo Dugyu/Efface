@@ -5,6 +5,7 @@
 	    _MainTex("Texture", 2D) = "white" {}
 		_p1("Param 1", Float) = 1.0
 		_p2("Param 2", Float) = 1.0
+		_p3("Transparency", Range(0, 1)) = 0.5
 		_color("Color", Color) = (0.4, 0.6, 0.9, 1.0)
 		_lightp("Light Position", Vector) = (10.4, 10.6, 10.9, 1.0)
  
@@ -29,6 +30,7 @@
 			float4 _MainTex_ST;
 			float _p1;
 			float _p2;
+			float _p3;
 			float4 _color;
 			float3 _lightp;
 
@@ -89,16 +91,19 @@
 				float3 sp = f.vp_p.xyz / f.vp_p.w;      //pixel viewport position
 				float3 on = normalize(f.obj_n);         //surface normal at pixel in object space
 				float3 n = normalize(f.n);				//surface normal at pixel in world space
-				float2 uv = f.uv;                       //texture mapping coordinates
+				//float2 uv = f.uv;                       //texture mapping coordinates
+				float2 uv = float2(0.5+p.x / 1024, 0.5 - p.z/1024);
+				
 				float3 eye = _WorldSpaceCameraPos;      //camera position
 				float t = _Time.y;                      //unity time in seconds since start
 
 				float d=length(eye-p);
-
 				float4 color = _color;
-				color.rgb *=d*0.1f;
-				color.a = 0.25;
-                return color;//tex2D(_MainTex, uv);
+				//color.rgb *=d*0.1f;
+				color = float4(0.0, 0.0, 0.0, 1.0);
+				color += tex2D(_MainTex, uv) + d * 0.0005f;
+				color.a =_p3;
+                return color;
             }
             ENDCG
         }
