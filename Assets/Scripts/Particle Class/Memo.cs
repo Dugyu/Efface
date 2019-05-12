@@ -247,7 +247,7 @@ public class Memo
     public void DrawTriangle()
 
     {
-
+        
         Vector3 dir = pos - lastRecordedPos;
         if (dir.sqrMagnitude > 4.0f)
         {

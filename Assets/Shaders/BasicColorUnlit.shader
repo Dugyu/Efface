@@ -91,7 +91,8 @@
 				float3 sp = f.vp_p.xyz / f.vp_p.w;      //pixel viewport position
 				float3 on = normalize(f.obj_n);         //surface normal at pixel in object space
 				float3 n = normalize(f.n);				//surface normal at pixel in world space
-				//float2 uv = f.uv;                       //texture mapping coordinates
+				//float2 uv = f.uv;                     //texture mapping coordinates
+				float2 uvTransparency = f.uv;            // Transparency
 				float2 uv = float2(0.5+p.x / 1024, 0.5 - p.z/1024);
 				
 				float3 eye = _WorldSpaceCameraPos;      //camera position
@@ -102,7 +103,7 @@
 				//color.rgb *=d*0.1f;
 				color = float4(0.0, 0.0, 0.0, 1.0);
 				color += tex2D(_MainTex, uv) + d * 0.0005f;
-				color.a =_p3;
+				color.a = uvTransparency.x;
                 return color;
             }
             ENDCG

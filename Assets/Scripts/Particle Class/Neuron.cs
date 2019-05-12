@@ -90,15 +90,23 @@ public class Neuron
         float y = 2.0f*maxheight + maxheight * 0.5f * Mathf.Pow(Random.value, 7.0f) - maxheight * level * 0.5f;
         pos = new Vector3(x, y, z);
         obj.transform.position = pos;
-        Mood();
+        ResetMood();
     }
 
 
-    public void Mood()
+
+
+    public void ResetMood()
     {
-        mood = Mathf.Sin(Mathf.PerlinNoise(pos.x / 10.0f, pos.y / 10.0f) * Mathf.PI * 2);
-        innerRing = Mathf.Pow(5.0f * (1.0f - Mathf.Pow(Random.value, 7.0f)), 2.0f);
-        outerRing = Mathf.Pow(50.0f * (1.0f - Mathf.Pow(Random.value, 7.0f)), 2.0f);
-        
+        mood = 1.0f;
+        //mood = Mathf.Sin(Mathf.PerlinNoise(pos.x / 10.0f, pos.y / 10.0f) * Mathf.PI * 2);
+        //innerRing = Mathf.Pow(5.0f * (1.0f - Mathf.Pow(Random.value, 7.0f)), 2.0f);
+        //outerRing = Mathf.Pow(50.0f * (1.0f - Mathf.Pow(Random.value, 7.0f)), 2.0f);   
     }
+
+    public void AddMood(float value)
+    {
+        mood += value;
+    }
+
 }

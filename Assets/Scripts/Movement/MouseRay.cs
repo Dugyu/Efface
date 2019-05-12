@@ -18,6 +18,7 @@ public class MouseRay : MonoBehaviour
         {
             Transform objectHit = hit.transform;
             Debug.Log(hit.point.x);
+            
         }
     }
 }

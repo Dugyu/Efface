@@ -391,7 +391,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BackGroundColor: {r: 1, g: 0.7137255, b: 0.7607843, a: 1}
   m_projectionMatrixMode: 2
   m_SensorSize: {x: 21, y: 15.2}
   m_LensShift: {x: 0, y: 0}
@@ -5970,7 +5970,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acc782dc0fd35aa4786f40a44a9bb0ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strength: 3
+  strength: 10
   memoGraphic: {fileID: 984821146}
   neuronGraphic: {fileID: 1884738664}
   crystalGraphic: {fileID: 1201832633}

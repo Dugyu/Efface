@@ -5,21 +5,20 @@ using UnityEngine;
 public class Flow : MonoBehaviour
 {
     public float strength;
-
-    public GameObject memoGraphic;
-    public GameObject neuronGraphic;
-    private TrailRenderer trail;
     public static int memoCount = 50;
     public static int neuronCount = 50;
     public static int layerCount = 5;
     public static int neuronsPerLayer = neuronCount / layerCount;
+
     private List<Memo> memos = new List<Memo>();
     private Neuron[] neurons = new Neuron[neuronCount];
     private Neuron[] neuronFirstLayer = new Neuron[neuronsPerLayer];
 
+    public GameObject memoGraphic;
+    public GameObject neuronGraphic;
+    private TrailRenderer trail;
     public GameObject crystalGraphic;
 
-    // Start is called before the first frame update
     void Start()
     {
         trail = memoGraphic.GetComponent<TrailRenderer>();
@@ -34,14 +33,14 @@ public class Flow : MonoBehaviour
             }   
         }
 
-        // find firt nodes for memos
+        // copy first layer neuron to array
         System.Array.Copy(neurons, 0 , neuronFirstLayer, 0, neuronsPerLayer);
-
+        // find firt nodes for memos
         Memo.SetPointerNeurons(neuronFirstLayer);
         for (int i = 0; i < memoCount; i++)
             {
                 Memo memo = new Memo(memoGraphic);
-                memo.obj.GetComponent<MeshRenderer>().enabled = false;
+                //memo.obj.GetComponent<MeshRenderer>().enabled = false;
                 memo.InitializeTriBuffer();
                 memo.crystal = new Crystal(crystalGraphic);
                 memos.Add(memo);

@@ -25,7 +25,6 @@ public class Swamp : MonoBehaviour
 
     void Start()
     {
-
         //initialize terrain
         divPlusOne = mDivision + 1;
         vertCount = divPlusOne * divPlusOne;
