@@ -71,7 +71,7 @@
 
 				//distortion  [optional]
 				//f.p += sin(f.p*_p1+ _Time.y)*_p2;                  //offset point along  world normal
-
+				f.p.y += sin(f.p * tex2Dlod(_SecondTex, float4(v.uv.xy, 0.0, 0.0)).rgb) * _p2; 
 				//projection
                 f.screen_p = mul(UNITY_MATRIX_VP, float4(f.p, 1.0));     //screen space
 				f.vp_p = f.screen_p;                                     //normalized viewport coords
@@ -85,7 +85,7 @@
             {
 				//aliases of input data
 				float3 op = f.obj_p;	                //pixel position,  object space
-				float3 p = f.p;                         //pixel position,  world space
+				float3 p = f.p;//+ 10*tex2D(_SecondTex,f.uv).r; //pixel position,  world space
 				float3 sp = f.vp_p.xyz / f.vp_p.w;      //pixel viewport position
 				float3 on = normalize(f.obj_n);         //surface normal at pixel in object space
 				float3 n = normalize(f.n);				//surface normal at pixel in world space
@@ -96,7 +96,20 @@
 				float d = length(eye-p);
 				float4 color = _color;
 				color = tex2D(_MainTex,uv) + tex2D(_SecondTex,uv);
+
+
+				//D. lighting
+				float3 lightDir = normalize(_lightp - p);  //normalized direction from fragment to light 
+				float diffuse = dot(lightDir, n);			 //dot product of normal and light direction
+				//float diffuse = 1- dot(lightDir, n);	 // reverse light effect
+				//diffuse = floor(diffuse * _p1 /_p1);        // Toon effect
+				//if(diffuse < 0.8) color.rgb = float4(1.0,0.2,0.3,1.0);
+				color.rgb = color.rgb + diffuse * 0.0005;			 //set the output rgb color to the color times the diffuse factor
 				color.rgb +=d*0.0005f;
+
+
+
+
                 return color;
             }
             ENDCG

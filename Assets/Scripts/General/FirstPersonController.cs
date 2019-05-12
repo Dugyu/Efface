@@ -30,10 +30,17 @@ public class FirstPersonController : MonoBehaviour {
             }
         }
 
-        // Turn on Mouse cursor
-        if (Input.GetKeyDown("escape"))
+        // Exit Application
+        if (Input.GetKey("escape"))
         {
-            Cursor.lockState = CursorLockMode.None;
+            Application.Quit();
         }
+        //// Turn on Mouse cursor
+        //if (Input.GetKeyDown("escape"))
+        //{
+        //    Cursor.lockState = CursorLockMode.None;
+        //}
+
+
     }
 }

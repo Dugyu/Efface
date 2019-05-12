@@ -93,7 +93,7 @@ Material:
     - _DepthGradientDeep: {r: 0.9433962, g: 0.52954787, b: 0.5619017, a: 0.5019608}
     - _DepthGradientShallow: {r: 0.9433962, g: 0, b: 0.2918419, a: 0.5019608}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FoamColor: {r: 0.9607843, g: 0.6418632, b: 0.5764706, a: 1}
+    - _FoamColor: {r: 1, g: 0.7137255, b: 0.7607843, a: 1}
     - _SurfaceNoiseScroll: {r: 0.03, g: 0.03, b: 0, a: 0}
     - _color: {r: 0.8, g: 0.45, b: 0.5, a: 1}
     - _lightp: {r: 10.4, g: 10.6, b: 10.9, a: 1}

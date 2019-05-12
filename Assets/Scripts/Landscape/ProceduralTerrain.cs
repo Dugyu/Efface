@@ -52,20 +52,14 @@ public class ProceduralTerrain : MonoBehaviour
         meshc.sharedMesh = mesh;
 
 
-
-
-
-
-
-
         ////initial texture
         //texture = new Texture2D(texSize, texSize);
         //Color[] texColor = new Color[texSize * texSize];
         //pixelSize = mSize / texSize;
 
-        ////fetch renderer
-        //m_Renderer = GetComponent<Renderer>();
-        //m_Renderer.material.SetTexture("_SecondTex", texture);
+        //fetch renderer
+        m_Renderer = GetComponent<Renderer>();
+        m_Renderer.material.SetVector("_lightp", player.position);
 
         //SetBlack();
     }
