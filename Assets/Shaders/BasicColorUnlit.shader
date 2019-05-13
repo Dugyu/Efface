@@ -2,7 +2,8 @@
 {
        Properties
     {
-	    _MainTex("Texture", 2D) = "white" {}
+	    _MainTex("MainTex", 2D) = "white" {}
+		_SecondTex("SecondTex", 2D) = "white" {}
 		_p1("Param 1", Float) = 1.0
 		_p2("Param 2", Float) = 1.0
 		_p3("Transparency", Range(0, 1)) = 0.5
@@ -28,6 +29,8 @@
 
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
+			sampler2D _SecondTex;
+			float4 _SecondTex_ST;
 			float _p1;
 			float _p2;
 			float _p3;
@@ -56,8 +59,7 @@
 				float2 uv : TEXCOORD0;
             };
 
-            //sampler2D _MainTex;
-            //float4 _MainTex_ST;
+
 
             fragmentData vert (meshVertexData v)
             {
@@ -102,7 +104,7 @@
 				float4 color = _color;
 				//color.rgb *=d*0.1f;
 				color = float4(0.0, 0.0, 0.0, 1.0);
-				color += tex2D(_MainTex, uv) + d * 0.0005f;
+				color += tex2D(_MainTex, uv) + tex2D(_SecondTex,uv) * 0.5 + d * 0.0005f;
 				color.a = uvTransparency.x;
                 return color;
             }

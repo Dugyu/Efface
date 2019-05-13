@@ -22,7 +22,7 @@ public class EyeRay : MonoBehaviour
     void Update()
     {
 
-        _gazePoint = new GazePoint();
+        _gazePoint = TobiiAPI.GetGazePoint();
 
         float targetingSpeed = targettingSpeed;
 
@@ -34,10 +34,18 @@ public class EyeRay : MonoBehaviour
                 Transform objectHit = hit.transform;
                 Vector3 hitPoint = hit.point;
                 Debug.Log(objectHit.tag);
-                if (objectHit.transform.tag == "Crystal")
+
+                if (objectHit.transform.tag == "Neuron")
                 {
-                    targetingSpeed = 0.001f;
+                    Color existing = objectHit.GetComponent<MeshRenderer>().material.color;
+                    Color target = Color.white;
+                    Color lerpColor = existing * 0.9f + target * 0.1f;
+                    objectHit.GetComponent<MeshRenderer>().material.color = lerpColor;
+
+                    player.transform.Translate(player.transform.forward * 5.0f * Time.deltaTime, Space.Self);
+
                 }
+
 
                 //instTarget = objectHit.position;
                 instTarget = hitPoint;
@@ -48,7 +56,7 @@ public class EyeRay : MonoBehaviour
 
             else
             {
-                Vector3 hitPoint = ray.GetPoint(1024.0f);
+                Vector3 hitPoint = ray.GetPoint(512.0f);
                 instTarget = hitPoint;
                 smoothTarget = smoothTarget * (1.0f - targettingSpeed) + instTarget * targettingSpeed;
                 player.transform.LookAt(smoothTarget, Vector3.up);

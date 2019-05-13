@@ -95,7 +95,7 @@
 
 				float d = length(eye-p);
 				float4 color = _color;
-				color = tex2D(_MainTex,uv) + tex2D(_SecondTex,uv);
+				color = tex2D(_MainTex,uv) + tex2D(_SecondTex,uv) * 0.5;
 
 
 				//D. lighting

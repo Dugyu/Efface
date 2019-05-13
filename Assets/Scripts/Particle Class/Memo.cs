@@ -134,11 +134,37 @@ public class Memo
 
     public void ChooseFisrtNode()
     {
-        int selected = Random.Range(0, pointerNeurons.Length);
+        float[] weight = new float[pointerNeurons.Length];
+        float totalSum = 0.0f;
+        for (int i = 0; i < weight.Length; ++i)
+        {
+            float thisSum = pointerNeurons[i].mood;
+            //for (int j = 0; j < pointerNeurons[i].childNeurons.Count; ++j)
+            //{
+            //    thisSum += pointerNeurons[i].childNeurons[j].mood;
+            //}
+            
+            weight[i] = thisSum;
+            totalSum += thisSum;
+        }
+        float pointerSum = 0.0f;
+
+        float value = Random.Range(0, totalSum);
+        int selected = 0;
+        for (int i = 0; i < weight.Length; ++i)
+        {
+            pointerSum += weight[i];
+            if (pointerSum > value){
+                selected = i;
+                break;
+            }
+        }
+
+        //int selected = Random.Range(0, pointerNeurons.Length);
         targetNeuron = pointerNeurons[selected];
     }
 
-    public void FindFisrtNode()
+    public void FindFirstNode()
     {
         float mindist = Mathf.Infinity;
         int index = 0;

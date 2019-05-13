@@ -203,9 +203,4 @@ public class ProceduralTerrain : MonoBehaviour
     }
 
 
-    void Update()
-    {
-        player.localScale = new Vector3(20.0f * Mathf.Sin(Time.realtimeSinceStartup),10.0f * Mathf.Sin(Time.realtimeSinceStartup), 16.0f* Mathf.Sin(Time.realtimeSinceStartup));
-        player.gameObject.GetComponent<MeshRenderer>().material.color = new Color(Mathf.Sin(Time.realtimeSinceStartup) * 0.72f, 0.267f,0.267f);
-    }
 }

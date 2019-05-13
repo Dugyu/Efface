@@ -28,7 +28,7 @@ public class FirstPersonController : MonoBehaviour {
             if (Input.GetKey(direction)) {
                 //Cursor.lockState = CursorLockMode.Locked;
 
-                this.transform.Translate(directions[direction] * speed * Time.deltaTime, Space.Self);
+                transform.Translate(directions[direction] * speed * Time.deltaTime, Space.Self);
             }
         }
         Cursor.lockState = CursorLockMode.None;

@@ -23,6 +23,7 @@ public class Flow : MonoBehaviour
     {
         trail = memoGraphic.GetComponent<TrailRenderer>();
 
+        
         // initialize neurons
         for (int j = 0; j < layerCount; j++)
         {
@@ -32,6 +33,8 @@ public class Flow : MonoBehaviour
                 neurons[(j*neuronsPerLayer) + i] = neuron;
             }   
         }
+
+        neuronGraphic.GetComponent<MeshRenderer>().enabled = false;
 
         // copy first layer neuron to array
         System.Array.Copy(neurons, 0 , neuronFirstLayer, 0, neuronsPerLayer);
@@ -96,7 +99,22 @@ public class Flow : MonoBehaviour
         foreach (Memo memo in memos)
         {
             memo.Attract(strength);
+            Debug.Log(memo.targetNeuron.id);
             memo.Update();
+        }
+
+        foreach (Neuron neuron in neurons)
+        {
+            Color existing = neuron.obj.GetComponent<MeshRenderer>().material.color;
+            if (existing != Color.black)
+            {
+                Color target = existing * 0.99f + Color.black * 0.01f;
+                Debug.Log(neuron.id);
+                neuron.obj.GetComponent<MeshRenderer>().material.color = target;
+                
+            }
+
+            neuron.UpdateMood();
         }
         //List<Memo> branches = new List<Memo>();
         //foreach (Memo memo in memos)

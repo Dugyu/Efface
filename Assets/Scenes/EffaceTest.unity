@@ -226,6 +226,7 @@ GameObject:
   m_Component:
   - component: {fileID: 245713644}
   - component: {fileID: 245713645}
+  - component: {fileID: 245713646}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -241,13 +242,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 245713643}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 15, z: -257.85}
+  m_LocalPosition: {x: 10, y: 20, z: 60}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 534669905}
   - {fileID: 515706717}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &245713645
 MonoBehaviour:
@@ -259,6 +260,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c94e189b1f932aa40bb73dc1bebfa0c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &245713646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 245713643}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19ddcec5de1126e48938c6fba22011d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &515706716
@@ -288,7 +301,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 515706716}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 245713644}
@@ -493,7 +506,7 @@ GameObject:
   - component: {fileID: 548066394}
   m_Layer: 0
   m_Name: Landscape
-  m_TagString: Untagged
+  m_TagString: Landscape
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6041,8 +6054,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1788138697}
   - component: {fileID: 1788138696}
+  - component: {fileID: 1788138700}
   - component: {fileID: 1788138698}
+  - component: {fileID: 1788138701}
   - component: {fileID: 1788138699}
+  - component: {fileID: 1788138702}
   m_Layer: 0
   m_Name: Scripting
   m_TagString: Untagged
@@ -6078,7 +6094,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1788138698
 MonoBehaviour:
@@ -6110,6 +6126,47 @@ MonoBehaviour:
   cam: {fileID: 534669904}
   player: {fileID: 245713643}
   targettingSpeed: 0.01
+--- !u!114 &1788138700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1788138695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52efe973eee63fb4fbd8218ffea95c35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  avatarGraphic: {fileID: 1361755532}
+--- !u!114 &1788138701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1788138695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46cd016dca1070142974e68dfc14cd9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  brush: {fileID: 515706717}
+  lastInput: {x: 0, y: 0, z: 0}
+--- !u!114 &1788138702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1788138695}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8caa3165744e9bb489d6faa4bf979bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  brush: {fileID: 515706717}
+  lastInput: {x: 0, y: 0, z: 0}
 --- !u!1 &1883210796
 GameObject:
   m_ObjectHideFlags: 0
@@ -6217,6 +6274,7 @@ GameObject:
   - component: {fileID: 1884738667}
   - component: {fileID: 1884738666}
   - component: {fileID: 1884738665}
+  - component: {fileID: 1884738670}
   m_Layer: 0
   m_Name: NeuronQuad
   m_TagString: Neuron
@@ -6246,7 +6304,7 @@ MeshCollider:
   m_GameObject: {fileID: 1884738664}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 14
@@ -6304,12 +6362,25 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1884738664}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17.716349, y: 8.896265, z: -13.787174}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &1884738670
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1884738664}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8651891599406611297
 GameObject:
   m_ObjectHideFlags: 0

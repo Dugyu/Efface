@@ -104,9 +104,9 @@ public class Neuron
         //outerRing = Mathf.Pow(50.0f * (1.0f - Mathf.Pow(Random.value, 7.0f)), 2.0f);   
     }
 
-    public void AddMood(float value)
+    public void UpdateMood()
     {
-        mood += value;
+        mood = 1.0f + obj.GetComponent<MeshRenderer>().material.color.r * 10.0f;
     }
 
 }

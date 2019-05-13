@@ -9,6 +9,7 @@ TagManager:
   - Landscape
   - Swamp
   - Sky
+  - Memo
   layers:
   - Default
   - TransparentFX
