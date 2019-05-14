@@ -6,7 +6,8 @@ public class FirstPersonEye : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-    
+        Cursor.visible = false;
+
     }
 
     // Update is called once per frame
@@ -49,6 +50,12 @@ public class FirstPersonEye : MonoBehaviour
             {
                 transform.Translate(direction * speed * Time.deltaTime, Space.Self);
             }
+        }
+
+        // Exit Application
+        if (Input.GetKey("escape"))
+        {
+            Application.Quit();
         }
     }
 }

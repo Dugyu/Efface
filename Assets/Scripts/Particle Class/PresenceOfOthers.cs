@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PresenceOfOthers : MonoBehaviour
 {
-    public static int avatarCount = 12;
+    public static int avatarCount = 20;
     private List<Avatar> avatars = new List<Avatar>();
 
 
