@@ -19,6 +19,7 @@ public class PresenceMeEye : MonoBehaviour
     {
 
         _gazePoint = TobiiAPI.GetGazePoint();
+
         lastInput = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f);
 
         baseline = Mathf.Sqrt(Screen.width * Screen.width + Screen.height * Screen.height);

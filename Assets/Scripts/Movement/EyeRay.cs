@@ -15,10 +15,6 @@ public class EyeRay : MonoBehaviour
 
     public GazePoint _gazePoint;
 
-    void Start()
-    {
-    }
-
     void Update()
     {
 
@@ -29,11 +25,11 @@ public class EyeRay : MonoBehaviour
         if (_gazePoint.IsValid) {
 
             ray = cam.ScreenPointToRay( new Vector3(_gazePoint.Screen.x, _gazePoint.Screen.y));
+
             if (Physics.Raycast(ray, out hit))
             {
                 Transform objectHit = hit.transform;
                 Vector3 hitPoint = hit.point;
-                Debug.Log(objectHit.tag);
 
                 if (objectHit.transform.tag == "Neuron")
                 {
@@ -47,19 +43,33 @@ public class EyeRay : MonoBehaviour
                 }
 
 
-                //instTarget = objectHit.position;
                 instTarget = hitPoint;
                 smoothTarget = smoothTarget * (1.0f - targetingSpeed) + instTarget * targetingSpeed;
-
-                player.transform.LookAt(smoothTarget, Vector3.up);
+                if (player.transform.forward == Vector3.up)
+                {
+                    player.transform.LookAt(smoothTarget, Vector3.back);
+                }
+                else
+                {
+                    player.transform.LookAt(smoothTarget, Vector3.up);
+                }
             }
 
             else
             {
+                // Imagine the hit point falls on an invisible globe 
                 Vector3 hitPoint = ray.GetPoint(512.0f);
                 instTarget = hitPoint;
                 smoothTarget = smoothTarget * (1.0f - targettingSpeed) + instTarget * targettingSpeed;
-                player.transform.LookAt(smoothTarget, Vector3.up);
+
+                if (player.transform.forward == Vector3.up)
+                {
+                    player.transform.LookAt(smoothTarget, Vector3.back);
+                }
+                else
+                {
+                    player.transform.LookAt(smoothTarget, Vector3.up);
+                }
             }
         }
 

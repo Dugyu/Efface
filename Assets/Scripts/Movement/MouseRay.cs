@@ -13,31 +13,37 @@ public class MouseRay : MonoBehaviour
     Vector3 smoothTarget;
 
 
-
-    void Start()
-    {
-
-    }
-
     void Update()
     {
        
         float targetingSpeed = targettingSpeed;
 
-
-
         ray = cam.ScreenPointToRay(Input.mousePosition);
+
+        if (Input.mousePosition.x < 1160 && Input.mousePosition.x >760 && Input.mousePosition.y < 640 && Input.mousePosition.y > 440)
+        {
+            targetingSpeed = 0.001f;
+        }
+
+
 
         if (Physics.Raycast(ray, out hit))
         {
             Transform objectHit = hit.transform;
             Vector3 hitPoint = hit.point;
+            
 
-            //instTarget = objectHit.position;
             instTarget = hitPoint;
             smoothTarget = smoothTarget * (1.0f - targetingSpeed) + instTarget * targetingSpeed;
             
-            player.transform.LookAt(smoothTarget, Vector3.up);
+            if (player.transform.forward == Vector3.up)
+            {
+                player.transform.LookAt(smoothTarget, Vector3.back);
+            }
+            else
+            {
+                player.transform.LookAt(smoothTarget, Vector3.up);
+            }
 
             if (objectHit.transform.tag == "Neuron")
             {
@@ -47,7 +53,6 @@ public class MouseRay : MonoBehaviour
                 objectHit.GetComponent<MeshRenderer>().material.color = lerpColor;
 
                 player.transform.Translate(player.transform.forward * 5.0f * Time.deltaTime, Space.Self);
-
             }
 
 
@@ -58,7 +63,16 @@ public class MouseRay : MonoBehaviour
             Vector3 hitPoint = ray.GetPoint(512.0f);
             instTarget = hitPoint;
             smoothTarget = smoothTarget * (1.0f - targettingSpeed) + instTarget * targettingSpeed;
-            player.transform.LookAt(smoothTarget, Vector3.up);
+
+            if (player.transform.forward == Vector3.up)
+            {
+                player.transform.LookAt(smoothTarget, Vector3.back);
+            }
+            else
+            {
+                player.transform.LookAt(smoothTarget, Vector3.up);
+            }
+
         }
     
     }

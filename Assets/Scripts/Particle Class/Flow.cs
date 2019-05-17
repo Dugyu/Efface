@@ -99,7 +99,7 @@ public class Flow : MonoBehaviour
         foreach (Memo memo in memos)
         {
             memo.Attract(strength);
-            Debug.Log(memo.targetNeuron.id);
+            //Debug.Log(memo.targetNeuron.id);
             memo.Update();
         }
 

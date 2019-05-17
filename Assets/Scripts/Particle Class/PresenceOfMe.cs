@@ -24,9 +24,6 @@ public class PresenceOfMe : MonoBehaviour
     {
         Vector3 difference = Input.mousePosition - lastInput;
 
-
-
-
         float waveValue = 1.0f - difference.magnitude / baseline;
 
 
@@ -39,9 +36,6 @@ public class PresenceOfMe : MonoBehaviour
 
 
         lastInput = Input.mousePosition;
-
-
-
 
         brush.localScale = new Vector3(20.0f * Mathf.Sin(Time.realtimeSinceStartup), 10.0f * Mathf.Sin(Time.realtimeSinceStartup), 16.0f * Mathf.Sin(Time.realtimeSinceStartup));
         brush.localScale *= waveValue;
