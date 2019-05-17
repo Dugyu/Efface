@@ -8,25 +8,26 @@ A Shared Landscape Responsive to Existence
 after installation finished, calibrate the eye tracker to your eyes.
 
 
-2. Download the EFFACE master folder. 
-
+2. Test out. 
 
 There are two ways to test out the project:
 
 a. Using Build Standalone Excutable File (Windows Only):
+download v1.0-alpha release at https://github.com/Dugyu/Efface/releases/tag/v1.0-alpha
 
 a.1 Using eye gaze as input
-unzip Efface_Win_Eye inside Efface/Standalones
+unzip Efface_Win_Eye 
 Run Efface.exe.
 
 a.2 Alternatively, you can use mouse as input
-unzip Efface_Win_Mouse inside Efface/Standalones
+unzip Efface_Win_Mouse
 Run Efface.exe.
 
 
 
 
 b. Using Unity Editor (Windows Only).
+Download Efface master folder.
 
 b.1 Go to Unity download site, choose the *exact* version 2018.3.8f1. 
 https://unity3d.com/get-unity/download/archive
