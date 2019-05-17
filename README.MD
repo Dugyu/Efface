@@ -1,24 +1,29 @@
 A Shared Landscape Responsive to Existence
 
+
 1. Download an install the Tobii Eye Tracker driver (Tobii Eye Tracking Core Software v2.16.4
 
 ) at https://gaming.tobii.com/getstarted/
 
 after installation finished, calibrate the eye tracker to your eyes.
 
+
 2. Download the EFFACE master folder. 
+
 
 There are two ways to test out the project:
 
 a. Using Build Standalone Excutable File (Windows Only):
 
 a.1 Using eye gaze as input
-unzip Efface_Win_Eye inside Efface/Builds
+unzip Efface_Win_Eye inside Efface/Standalones
 Run Efface.exe.
 
 a.2 Alternatively, you can use mouse as input
-unzip Efface_Win_Mouse inside Efface/Builds
+unzip Efface_Win_Mouse inside Efface/Standalones
 Run Efface.exe.
+
+
 
 
 b. Using Unity Editor (Windows Only).
