@@ -15,13 +15,15 @@ There are two ways to test out the project:
 a. Using Build Standalone Excutable File (Windows Only):
 download v1.0-alpha release at https://github.com/Dugyu/Efface/releases/tag/v1.0-alpha
 
-a.1 Using eye gaze as input
+a.1 Using eye gaze and head pose as input
 unzip Efface_Win_Eye 
 Run Efface.exe.
+move head as if you are diving into the scene
 
 a.2 Alternatively, you can use mouse as input
 unzip Efface_Win_Mouse
 Run Efface.exe.
+WASDRF for forward/left/back/right/up/down
 
 
 
